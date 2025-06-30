@@ -28,6 +28,24 @@
   --input: 214.3 31.8% 91.4%;
   --ring: 221.2 83.2% 53.3%;
   --radius: 0.75rem;
+  --toast-success-bg: 142.1 71% 94.1%; /* hsl(green-100) */
+  --toast-success-border: 142.1 76.2% 36.3%; /* hsl(green-500) */
+  --toast-success-text: 142.1 71.2% 20.3%; /* hsl(green-900) */
+
+  /* Error (Red) */
+  --toast-error-bg: 0 72.2% 95.1%; /* hsl(red-100) */
+  --toast-error-border: 0 84.2% 60.2%; /* hsl(red-500) */
+  --toast-error-text: 0 72.2% 30.2%; /* hsl(red-900) */
+
+  /* Info (Blue) - Optional, but good to have */
+  --toast-info-bg: 217.2 91.2% 95.1%; /* hsl(blue-100) */
+  --toast-info-border: 217.2 91.2% 59.8%; /* hsl(blue-500) */
+  --toast-info-text: 217.2 91.2% 30%; /* hsl(blue-900) */
+
+  /* Warning (Yellow) - Optional, but good to have */
+  --toast-warning-bg: 47.9 95.8% 95.5%; /* hsl(yellow-100) */
+  --toast-warning-border: 47.9 95.8% 53.1%; /* hsl(yellow-500) */
+  --toast-warning-text: 47.9 95.8% 23.1%; /* hsl(yellow-900) */
 }
 
 .dark {
@@ -50,6 +68,24 @@
   --border: 217.2 32.6% 17.5%;
   --input: 217.2 32.6% 17.5%;
   --ring: 224.3 76.3% 48%;
+  --toast-success-bg: 142.1 76.2% 15.3%; /* hsl(green-950) */
+  --toast-success-border: 142.1 70.2% 28.3%; /* hsl(green-700) */
+  --toast-success-text: 142.1 71.2% 84.1%; /* hsl(green-200) */
+
+  /* Error (Red) */
+  --toast-error-bg: 0 84.2% 20.2%; /* hsl(red-950) */
+  --toast-error-border: 0 72.2% 40.2%; /* hsl(red-700) */
+  --toast-error-text: 0 72.2% 85.1%; /* hsl(red-200) */
+
+  /* Info (Blue) */
+  --toast-info-bg: 217.2 91.2% 20.2%; /* hsl(blue-950) */
+  --toast-info-border: 217.2 81.2% 40%; /* hsl(blue-700) */
+  --toast-info-text: 217.2 91.2% 85.1%; /* hsl(blue-200) */
+
+  /* Warning (Yellow) */
+  --toast-warning-bg: 47.9 95.8% 20.1%; /* hsl(yellow-950) */
+  --toast-warning-border: 47.9 95.8% 33.1%; /* hsl(yellow-700) */
+  --toast-warning-text: 47.9 95.8% 85.5%; /* hsl(yellow-200) */
 }
 
 @layer base {
