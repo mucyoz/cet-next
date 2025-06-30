@@ -171,9 +171,7 @@ export function PersonalInfoForm({
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Current Address *</FormLabel>
-                <FormControl>
-                  <Input placeholder="Street address" {...field} />
-                </FormControl>
+                <Input placeholder="Street address" {...field} />
                 <FormMessage />
               </FormItem>
             )}
