@@ -422,6 +422,7 @@ export default function HomePage() {
                   { text: "Standard 7-10 business day delivery" },
                   { text: "30-minute career success consultation" },
                   { text: "Digital copy of evaluation" },
+                  { text: "Job search resources toolkit" },
                 ]}
               />
               <PricingCard
@@ -437,6 +438,7 @@ export default function HomePage() {
                   { text: "Digital + hard copy reports" },
                   { text: "Career pathway overview" },
                   { text: "Professional licensing roadmap" },
+                  { text: "Premium success resources toolkit" },
                 ]}
               />
               <PricingCard
@@ -451,8 +453,10 @@ export default function HomePage() {
                   { text: "Industry-specific guidance" },
                   { text: "Job search strategy consultation" },
                   { text: "Resume optimization tips" },
+                  { text: "Recommendations for in-demand certifications" },
                   { text: "3-5 business day delivery" },
                   { text: "3 professional network introductions" },
+                  { text: "6-month email support access" },
                 ]}
               />
               <PricingCard
@@ -466,7 +470,11 @@ export default function HomePage() {
                   { text: "Personalized education transition plan" },
                   { text: "Industry networking guidance" },
                   { text: "Follow-up support (60 days)" },
+                  {
+                    text: "Help with interview prep, and job search strategies",
+                  },
                   { text: "Rush delivery (1-2 business days)" },
+                  { text: "Skills gap analysis & certificate recommendations" },
                   { text: "VIP document handling" },
                 ]}
               />
