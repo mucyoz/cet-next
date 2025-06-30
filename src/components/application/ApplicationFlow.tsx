@@ -127,7 +127,7 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
 
     if (!result.success) {
       const errorMessage = result.error.errors[0].message;
-      toast.success("Incomplete Information", { description: errorMessage });
+      toast.error("Incomplete Information", { description: errorMessage });
       return false;
     }
     return true;
