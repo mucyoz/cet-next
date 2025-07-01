@@ -10,7 +10,7 @@ import {
 
 // --- Environment Variable Checks & Stripe Initialization ---
 // This check runs when the serverless function starts up.
-if (!process.env.STRIPE_SECRET_KEY || !process.env.EMAIL_USER) {
+if (!process.env.STRIPE_SECRET_KEY || !process.env.EMAIL_SERVER_USER) {
   // This error will be logged on the server if Vercel env vars are missing.
   console.error(
     "FATAL: Missing critical environment variables (Stripe or Email)."
