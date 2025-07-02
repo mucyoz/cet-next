@@ -1,5 +1,6 @@
 "use client";
-import { useState, useCallback } from "react";
+
+import { useState, useCallback, useEffect } from "react"; // Added useEffect for debugging
 import { ArrowLeft, ArrowRight, CheckCircle2 } from "lucide-react";
 import { AnimatePresence, motion } from "framer-motion";
 import { PersonalInfoForm } from "./steps/PersonalInfoForm";
@@ -11,7 +12,6 @@ import { cn } from "@/lib/utils";
 import { toast } from "sonner";
 import * as z from "zod";
 
-// Import your centralized schemas
 import {
   personalInfoSchema,
   educationSchema,
@@ -22,24 +22,16 @@ import {
 import { Button } from "@/components/ui/button";
 import { Progress } from "@/components/ui/progress";
 import PaymentEntry from "./steps/PaymentEntry";
+import { EmailVerificationDialog } from "./EmailVerificationDialog";
 
-// --- Type Definitions ---
-type PersonalInfoData = z.infer<typeof personalInfoSchema>;
-type EducationData = z.infer<typeof educationSchema>;
-type DocumentsData = z.infer<typeof documentsSchema>;
-type PackageData = z.infer<typeof packageSelectionSchema>;
-type ReviewData = z.infer<typeof reviewSchema>;
-
-// Export this interface so child components can use it for their props
 export interface FormData {
-  personalInfo: Partial<PersonalInfoData>;
-  education: Partial<EducationData>;
-  documents: Partial<DocumentsData>;
-  selectedPackage: Partial<PackageData>;
-  reviewData: Partial<ReviewData>;
+  personalInfo: Partial<z.infer<typeof personalInfoSchema>>;
+  education: Partial<z.infer<typeof educationSchema>>;
+  documents: Partial<z.infer<typeof documentsSchema>>;
+  selectedPackage: Partial<z.infer<typeof packageSelectionSchema>>;
+  reviewData: Partial<z.infer<typeof reviewSchema>>;
 }
 
-// --- Steps Configuration ---
 const steps = [
   {
     id: 1,
@@ -86,7 +78,6 @@ const steps = [
 ];
 
 export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
-  // --- STATE AND HOOKS (All at the top level) ---
   const [currentStep, setCurrentStep] = useState(1);
   const [formData, setFormData] = useState<FormData>({
     personalInfo: {},
@@ -96,15 +87,24 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
     reviewData: { termsAccepted: false },
   });
 
+  const [isEmailVerified, setIsEmailVerified] = useState(false);
+  const [isVerificationPopupOpen, setIsVerificationPopupOpen] = useState(false);
+
+  // *** DEBUG CHECKPOINT #3 ***
+  // This will run WHENEVER the isVerificationPopupOpen state changes.
+  useEffect(() => {
+    console.log(
+      `CHECKPOINT 3: Popup state changed. New value is: ${isVerificationPopupOpen}`
+    );
+  }, [isVerificationPopupOpen]);
+
+  const updateFormData = useCallback((stepKey: keyof FormData, data: any) => {
+    setFormData((prev) => ({ ...prev, [stepKey]: data }));
+  }, []);
+
   const currentStepData = steps.find((step) => step.id === currentStep);
   const currentStepKey = currentStepData?.key as keyof FormData;
-  // const [isSubmitting , setIsSubmitting ] = useState()
-  const updateFormData = useCallback((stepKey: keyof FormData, data: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [stepKey]: data,
-    }));
-  }, []);
+  const [isNavigating, setIsNavigating] = useState(false);
 
   const updateCurrentStepData = useCallback(
     (data: any) => {
@@ -115,107 +115,112 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
     [currentStepKey, updateFormData]
   );
 
-  // --- DERIVED STATE AND CONSTANTS ---
-  const totalSteps = steps.length;
-  const progress = (currentStep / totalSteps) * 100;
-
-  // --- VALIDATION AND EVENT HANDLERS ---
   const validateCurrentStep = (): boolean => {
     if (!currentStepData) return false;
     const dataToValidate = formData[currentStepData.key as keyof FormData];
     const result = currentStepData.schema.safeParse(dataToValidate);
-
     if (!result.success) {
-      const errorMessage = result.error.errors[0].message;
-      toast.error("Incomplete Information", { description: errorMessage });
-      console.log("error", errorMessage);
+      toast.error("Incomplete Information", {
+        description: result.error.errors[0].message,
+      });
       return false;
     }
     return true;
   };
 
-  // const handleNext = async () => {
-  //   if (!validateCurrentStep()) {
-  //     return;
-  //   }
-
-  //   if (currentStep < totalSteps) {
-  //     setCurrentStep(currentStep + 1);
-  //     window.scrollTo(0, 0);
-  //   } else {
-  //     // Final submission logic
-  //     setIsSubmitting(true);
-  //     console.log("Submitting final data:", formData);
-  //     try {
-  //       // Simulate API call
-  //       await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  //       toast("Application Submitted Successfully!", {
-  //         description:
-  //           "We've received your application and will contact you shortly.",
-  //         duration: 5000,
-  //       });
-
-  //       // Redirect after a delay
-  //       setTimeout(() => onBack(), 3000);
-  //     } catch (error) {
-  //       console.error("Submission error:", error);
-  //       toast("Submission Error", {
-  //         description:
-  //           "There was an error submitting your application. Please try again.",
-  //       });
-  //     } finally {
-  //       setIsSubmitting(false);
-  //     }
-  //   }
-  // };
   const handleNext = async () => {
     if (!validateCurrentStep()) {
       return;
     }
+    setIsNavigating(true);
 
-    // *** NEW: Save data before going to the payment step ***
+    // *** Email Verification Logic with Better Error Handling ***
+    if (currentStep === 1 && !isEmailVerified) {
+      // 1. Immediately open the dialog and disable the 'Next' button
+      setIsVerificationPopupOpen(true);
+      setIsNavigating(true);
+
+      try {
+        // 2. Start the API call in the background.
+        // We can show a toast here to let them know something is happening.
+        toast.info("Sending verification code to your email...");
+
+        const response = await fetch("/api/send-verification", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ email: formData.personalInfo.email }),
+        });
+
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(
+            errorData.message || "Failed to send verification code."
+          );
+        }
+
+        // 3. On success, show a success toast. The dialog is already open.
+        toast.success("Code sent! Please check your inbox.");
+      } catch (error: any) {
+        // 4. If it fails, show an error toast and CLOSE the dialog
+        //    so the user isn't stuck on a popup for a failed action.
+        console.error(
+          "A critical error occurred while sending the code:",
+          error
+        );
+        toast.error("Failed to Send Email", {
+          description: error.message || "Please try again or contact support.",
+        });
+        setIsVerificationPopupOpen(false); // Close the dialog on failure
+      } finally {
+        // 5. No matter what, re-enable the main 'Next' button.
+        setIsNavigating(false);
+      }
+
+      return; // Stop execution here until the user verifies inside the dialog.
+    }
+    // *** End of updated logic ***
+
     if (currentStep === 5) {
       try {
-        // Save the complete form data to localStorage
         localStorage.setItem("applicationFormData", JSON.stringify(formData));
-        console.log("Form data saved to localStorage before payment.");
       } catch (error) {
         console.error("Could not save form data to localStorage:", error);
-        toast.error(
-          "An error occurred preparing for payment. Please try again."
-        );
-        return; // Stop if we can't save
+        toast.error("An error occurred. Please try again.");
+        setIsNavigating(false);
+        return;
       }
     }
 
-    if (currentStep < totalSteps) {
+    if (currentStep < steps.length) {
       setCurrentStep(currentStep + 1);
       window.scrollTo(0, 0);
-    } else {
-      // The final submission will now happen on the /payment-success page
-      // This 'else' block can be removed or left empty
     }
+    setIsNavigating(false);
   };
+
+  const handleVerificationSuccess = () => {
+    toast.success("Email Verified!");
+    setIsEmailVerified(true);
+    setIsVerificationPopupOpen(false);
+    setCurrentStep(currentStep + 1);
+    window.scrollTo(0, 0);
+  };
+
   const handleBack = () => {
     if (currentStep > 1) {
       setCurrentStep(currentStep - 1);
-      window.scrollTo(0, 0);
     } else {
-      // If on the first step, use the onBack prop to go home
       onBack();
     }
   };
 
-  // --- RENDER LOGIC ---
-  if (!currentStepData) {
-    return null; // Safety guard clause
-  }
-
+  if (!currentStepData) return null;
   const CurrentStepComponent = currentStepData.component;
+  const progress = (currentStep / steps.length) * 100;
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* The rest of your JSX remains the same */}
       <header className="bg-white shadow-sm py-4 sticky top-0 z-10">
         <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center">
@@ -230,7 +235,7 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
             <h1 className="font-serif text-xl font-bold text-center text-gray-900">
               Credential Evaluation Application
             </h1>
-            <div className="w-20"></div> {/* Spacer for centering */}
+            <div className="w-20"></div>
           </div>
         </div>
       </header>
@@ -296,9 +301,10 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
           <Button variant="outline" onClick={handleBack} className="px-6">
             {currentStep === 1 ? "Return to Home" : "Previous Step"}
           </Button>
-          {currentStep < totalSteps && (
+          {currentStep < steps.length && (
             <Button
               onClick={handleNext}
+              disabled={isNavigating}
               className="bg-blue-600 hover:bg-blue-700 px-6"
             >
               <span className="flex items-center">
@@ -308,6 +314,12 @@ export default function ApplicationFlow({ onBack }: { onBack: () => void }) {
           )}
         </div>
       </div>
+      <EmailVerificationDialog
+        isOpen={isVerificationPopupOpen}
+        onClose={() => setIsVerificationPopupOpen(false)}
+        email={formData.personalInfo.email || ""}
+        onVerified={handleVerificationSuccess}
+      />
     </div>
   );
 }

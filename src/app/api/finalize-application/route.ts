@@ -149,7 +149,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error("Finalization API Error:", error);
     return NextResponse.json(
-      { message: `An unexpected server error occurred: ${error.message}` },
+      { message: `An unexpected server error occurred : ${error.message}` },
       { status: 500 }
     );
   }

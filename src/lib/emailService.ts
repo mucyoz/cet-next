@@ -11,16 +11,26 @@ interface EmailParams {
   documentLinks?: { name: string; url: string }[]; // This is optional as the user email won't have it
 }
 
-// --- Nodemailer Transporter Setup ---
-// This configures the connection to your email server.
-// All sensitive data should come from your environment variables (.env.local).
+// --- Nodemailer Transporter (No Changes Needed) ---
+if (
+  !process.env.EMAIL_SERVER_HOST ||
+  !process.env.EMAIL_SERVER_PORT ||
+  !process.env.EMAIL_SERVER_USER ||
+  !process.env.EMAIL_SERVER_PASSWORD
+) {
+  // This error message is now more helpful
+  throw new Error(
+    "Missing required email server environment variables. Check your .env.local file."
+  );
+}
+
 const transporter = nodemailer.createTransport({
-  host: process.env.EMAIL_SERVER_HOST,
-  port: Number(process.env.EMAIL_SERVER_PORT),
-  secure: process.env.EMAIL_SERVER_PORT === "465", // `true` for port 465, `false` for others like 587
+  host: process.env.EMAIL_SERVER_HOST, // Use EMAIL_SERVER_HOST
+  port: Number(process.env.EMAIL_SERVER_PORT), // Use EMAIL_SERVER_PORT
+  secure: true, // For Gmail with port 465, secure should be true
   auth: {
-    user: process.env.EMAIL_SERVER_USER,
-    pass: process.env.EMAIL_SERVER_PASSWORD,
+    user: process.env.EMAIL_SERVER_USER, // Use EMAIL_SERVER_USER
+    pass: process.env.EMAIL_SERVER_PASSWORD, // Use EMAIL_SERVER_PASSWORD
   },
   // Adding timeouts is a good practice to prevent hanging requests, even for small emails.
   connectionTimeout: 10000, // 10 seconds
