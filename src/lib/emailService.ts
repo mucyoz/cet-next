@@ -33,76 +33,143 @@ const transporter = nodemailer.createTransport({
  * This email contains links to the uploaded documents instead of attachments.
  * @param {EmailParams} params - The email parameters, including form data and document links.
  */
+// This is the updated function for your lib/emailService.ts file
+
 export async function sendApplicationEmail({
   formData,
   paymentDetails,
   documentLinks,
 }: EmailParams) {
-  // 1. Dynamically generate the HTML for the list of document links.
-  let documentsHtmlSection =
-    "<p>No documents were uploaded with this application.</p>";
+  // Destructure for easier access to all parts of the form data
+  const { personalInfo, education, selectedPackage } = formData;
 
-  if (documentLinks && documentLinks.length > 0) {
-    documentsHtmlSection = `
-      <h3>Uploaded Documents (${documentLinks.length})</h3>
-      <p><em>Note: These are secure download links that will expire in 7 days.</em></p>
-      <ul>
-        ${documentLinks
-          .map(
-            (doc) =>
-              `<li><a href="${doc.url}" target="_blank" rel="noopener noreferrer">${doc.name}</a></li>`
-          )
-          .join("")}
-      </ul>
-    `;
-  }
+  // --- 1. Generate HTML for each section based on the schema ---
 
-  // 2. Construct the full HTML body for the email.
-  const emailHtml = `
-    <html>
-      <body style="font-family: sans-serif; line-height: 1.6;">
-        <h1>New Application Received</h1>
-        <p>A new application has been submitted and paid for. Please review the details below.</p>
-        
-        <h2>Applicant Details:</h2>
-        <ul>
-          <li><strong>Name:</strong> ${formData.personalInfo.firstName} ${
-    formData.personalInfo.lastName
+  // Personal Information Section (including optional 'state')
+  const personalInfoHtml = `
+    <h2 style="color: #0056b3;">1. Personal Information</h2>
+    <ul>
+      <li><strong>Name:</strong> ${personalInfo.firstName} ${
+    personalInfo.lastName
   }</li>
-          <li><strong>Email:</strong> ${formData.personalInfo.email}</li>
-          <li><strong>Phone:</strong> ${formData.personalInfo.phone}</li>
-        </ul>
-
-        <h2>Payment Details:</h2>
-        <ul>
-          <li><strong>Transaction ID:</strong> ${paymentDetails.id}</li>
-          <li><strong>Amount:</strong> ${(paymentDetails.amount / 100).toFixed(
-            2
-          )} ${paymentDetails.currency.toUpperCase()}</li>
-          <li><strong>Status:</strong> ${paymentDetails.status}</li>
-        </ul>
-        <hr>
-        
-        ${documentsHtmlSection}
-        
-        <hr>
-        <p>Please review the full application in your admin dashboard.</p>
-      </body>
-    </html>
+      <li><strong>Email:</strong> <a href="mailto:${personalInfo.email}">${
+    personalInfo.email
+  }</a></li>
+      <li><strong>Phone:</strong> ${personalInfo.phone}</li>
+      <li><strong>Country of Origin:</strong> ${personalInfo.country}</li>
+      <li><strong>Address:</strong> ${personalInfo.address}, ${
+    personalInfo.city
+  }, ${personalInfo.state || "N/A"}, ${personalInfo.zipCode}</li>
+    </ul>
   `;
 
-  // 3. Send the email using the configured transporter.
+  // Education History Section (loops through array and handles optional 'gpa')
+  const educationHtml = `
+    <h2 style="color: #0056b3;">2. Education History</h2>
+    <ul>
+      ${
+        education.educationHistory
+          .map(
+            (edu: any) => `
+        <li style="margin-bottom: 15px; padding-bottom: 15px; border-bottom: 1px solid #eee;">
+          <strong>Institution:</strong> ${edu.institution}, ${edu.country}<br>
+          <strong>Degree:</strong> ${edu.degreeType} in ${edu.fieldOfStudy}<br>
+          <strong>Period:</strong> ${edu.startYear} - ${edu.endYear}<br>
+          ${
+            edu.gpa
+              ? `<strong>GPA:</strong> ${edu.gpa}`
+              : "<strong>GPA:</strong> Not Provided"
+          }
+        </li>
+      `
+          )
+          .join("") || "<li>No education history was provided.</li>"
+      }
+    </ul>
+  `;
+
+  // Package Selection Section (includes all details from the schema)
+  const packageHtml = `
+    <h2 style="color: #0056b3;">3. Package Selection</h2>
+    <ul>
+      <li><strong>Package Name:</strong> ${selectedPackage.name}</li>
+      <li><strong>Price:</strong> $${selectedPackage.price.toFixed(2)}</li>
+      <li><strong>Processing Time:</strong> ${
+        selectedPackage.processingTime
+      }</li>
+      <li><strong>Package Features:</strong>
+        <ul>${selectedPackage.features
+          .map((feature: string) => `<li>${feature}</li>`)
+          .join("")}</ul>
+      </li>
+    </ul>
+  `;
+
+  // Payment Confirmation Section
+  const paymentHtml = `
+    <h2 style="color: #0056b3;">4. Payment Confirmation</h2>
+    <ul style="list-style-type: none; padding: 0;">
+        <li style="background: #f0f8ff; padding: 10px; border-radius: 5px;">
+            <strong>Status:</strong> <span style="color: green; font-weight: bold;">${
+              paymentDetails.status
+            }</span><br>
+            <strong>Transaction ID:</strong> ${paymentDetails.id}<br>
+            <strong>Amount Paid:</strong> $${(
+              paymentDetails.amount / 100
+            ).toFixed(2)} ${paymentDetails.currency.toUpperCase()}
+        </li>
+    </ul>
+  `;
+
+  // Documents Section (using secure links)
+  const documentsHtml = `
+    <h2 style="color: #0056b3;">5. Documents (Secure Download Links)</h2>
+    <p>The following documents are available for secure download for the next 30 days.</p>
+    <ul>
+      ${
+        documentLinks && documentLinks.length > 0
+          ? documentLinks
+              .map(
+                (doc) =>
+                  `<li><a href="${doc.url}" style="color: #0056b3;">${doc.name}</a></li>`
+              )
+              .join("")
+          : "<li>No documents were uploaded.</li>"
+      }
+    </ul>
+  `;
+
+  // --- 2. Assemble the final email body ---
+  const emailHtml = `
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        <h1 style="color: #0056b3; font-size: 24px;">New Credential Evaluation Application</h1>
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        ${personalInfoHtml}
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        ${educationHtml}
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        ${packageHtml}
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        ${paymentHtml}
+        <hr style="border: 0; border-top: 1px solid #eee; margin: 20px 0;">
+        ${documentsHtml}
+      </div>
+    </body>
+  `;
+
+  // --- 3. Send the email using the configured transporter ---
   try {
     await transporter.sendMail({
-      from: `"Your App Name" <${process.env.EMAIL_FROM}>`, // e.g., "My App <noreply@myapp.com>"
-      to: process.env.ADMIN_EMAIL!,
-      subject: `New Application from ${formData.personalInfo.firstName} ${formData.personalInfo.lastName}`,
+      from: `"${personalInfo.firstName} ${personalInfo.lastName}" <${process.env.EMAIL_USER}>`,
+      to: process.env.ADMIN_EMAIL,
+      replyTo: personalInfo.email,
+      subject: `New Application: ${personalInfo.firstName} ${personalInfo.lastName}`,
       html: emailHtml,
-      // NOTE: The 'attachments' property is intentionally omitted.
     });
 
     console.log(
-      "Admin notification email with links sent successfully via Nodemailer."
+      `Application email sent for ${personalInfo.email} and routed to admin.`
     );
   } catch (error) {
     console.error("Failed to send application email:", error);
@@ -115,41 +182,84 @@ export async function sendApplicationEmail({
  * Sends a confirmation email to the user after they submit their application.
  * @param {EmailParams} params - The email parameters, primarily for user details.
  */
+// This is the updated function for your lib/emailService.ts file
+
 export async function sendUserConfirmationEmail({
   formData,
   paymentDetails,
 }: EmailParams) {
+  // Destructure for easier access
+  const { personalInfo, selectedPackage } = formData;
+
+  // --- Construct the new, beautifully formatted HTML body ---
   const emailHtml = `
-    <html>
-      <body style="font-family: sans-serif; line-height: 1.6;">
-        <h1>Thank You for Your Application!</h1>
-        <p>Hi ${formData.personalInfo.firstName},</p>
-        <p>We have successfully received your application and payment. Your transaction ID is <strong>${paymentDetails.id}</strong>.</p>
-        <p>Our team will review your submission and get back to you shortly. You can expect an update within the processing time for the package you selected.</p>
-        <p>Thank you for choosing us.</p>
+    <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
+      <div style="max-width: 600px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+        
+        <h1 style="color: #0056b3; font-size: 24px;">Thank You, ${
+          personalInfo.firstName
+        }!</h1>
+        
+        <p>We've successfully received your application. This email confirms your order and what to expect next.</p>
+        
+        <div style="background: #f0f8ff; padding: 15px; border: 1px solid #ddeeff; border-radius: 5px; margin-top: 20px; margin-bottom: 20px;">
+          <h2 style="margin-top:0; color: #0056b3; font-size: 18px;">Your Order Summary</h2>
+          
+          <p style="margin-bottom: 5px;">
+            <strong>Package Purchased:</strong><br>
+            ${selectedPackage.name}
+          </p>
+          
+          <p style="margin-bottom: 5px;">
+            <strong>Estimated Processing Time:</strong><br>
+            <span style="font-weight: bold;">${
+              selectedPackage.processingTime
+            }</span>
+          </p>
+          
+          <p style="margin-bottom: 5px;">
+            <strong>Amount Paid:</strong><br>
+            $${(paymentDetails.amount / 100).toFixed(
+              2
+            )} ${paymentDetails.currency.toUpperCase()}
+          </p>
+          
+          <p style="margin-bottom: 0;">
+            <strong>Transaction ID:</strong><br>
+            ${paymentDetails.id}
+          </p>
+        </div>
+        
+        <p>Our team will now begin reviewing your documents. We will contact you if any additional information is required. You can expect your evaluation to be completed within the processing time stated above.</p>
+        
+        <p>If you have any questions, feel free to reply directly to this email.</p>
+        
         <br>
         <p>Sincerely,</p>
-        <p>The Team at Your App Name</p>
-      </body>
-    </html>
+        <p><strong>The Team at [Your Company Name]</strong></p>
+        
+      </div>
+    </body>
   `;
 
+  // --- The rest of the function remains the same ---
   try {
     await transporter.sendMail({
-      from: `"Your App Name" <${process.env.EMAIL_FROM}>`,
-      to: formData.personalInfo.email, // Send to the applicant
-      subject: "Your Application has been Received!",
+      from: `"[Your Company Name]" <${process.env.EMAIL_USER}>`,
+      to: personalInfo.email, // Send to the applicant
+      replyTo: process.env.ADMIN_EMAIL,
+      subject: "We've Received Your Application!",
       html: emailHtml,
     });
 
     console.log(
-      `User confirmation email sent successfully to ${formData.personalInfo.email}.`
+      `User confirmation email sent successfully to ${personalInfo.email}.`
     );
   } catch (error) {
     // It's often acceptable to just log an error for the user confirmation
     // without failing the entire API request.
     console.warn(
-      `Failed to send user confirmation email to ${formData.personalInfo.email}:`,
+      `Failed to send user confirmation email to ${personalInfo.email}:`,
       error
     );
   }

@@ -91,7 +91,7 @@ export async function POST(request: NextRequest) {
             resource_type: file.resource_type,
             type: "upload",
             attachment: true, // This is a hint to the browser to download, not display
-            expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 7, // Link is valid for 7 days
+            expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // Link is valid for 7 days
           }
         );
 
