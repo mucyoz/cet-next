@@ -2,33 +2,45 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { Stripe } from "stripe";
-// Import BOTH functions from your email service
+import { v2 as cloudinary } from "cloudinary";
 import {
   sendApplicationEmail,
   sendUserConfirmationEmail,
 } from "../../../lib/emailService";
 
-// --- Environment Variable Checks & Stripe Initialization ---
-// This check runs when the serverless function starts up.
-if (!process.env.STRIPE_SECRET_KEY || !process.env.EMAIL_USER) {
-  // This error will be logged on the server if Vercel env vars are missing.
+// Define the shape of the file object coming from your frontend
+interface CloudinaryFile {
+  name: string;
+  public_id: string;
+  resource_type: string;
+}
+
+// --- Environment Variable Checks & Service Initializations ---
+// This ensures your application fails to start if critical configuration is missing.
+if (
+  !process.env.STRIPE_SECRET_KEY ||
+  !process.env.CLOUDINARY_CLOUD_NAME ||
+  !process.env.CLOUDINARY_API_KEY ||
+  !process.env.CLOUDINARY_API_SECRET
+) {
   console.error(
-    "FATAL: Missing critical environment variables (Stripe or Email)."
+    "FATAL: Missing critical environment variables for Stripe or Cloudinary."
   );
 }
 
+// Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
+
+// Configure Cloudinary
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
 
 // --- Main API Handler ---
 export async function POST(request: NextRequest) {
   try {
-    // Ensure the Stripe key is actually available at runtime
-    if (!process.env.STRIPE_SECRET_KEY) {
-      throw new Error(
-        "Stripe secret key is not available on the server environment."
-      );
-    }
-
     const body = await request.json();
     const { paymentIntentId, formData } = body;
 
@@ -40,7 +52,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- 2. Verify Payment with Stripe ---
+    // 2. Verify Payment with Stripe
     const paymentIntent = await stripe.paymentIntents.retrieve(paymentIntentId);
     if (paymentIntent.status !== "succeeded") {
       return NextResponse.json(
@@ -49,54 +61,51 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- 3. Pre-fetch Attachment Content from Cloudinary ---
-    const attachmentsWithContent = [];
-    if (
-      formData.documents &&
-      formData.documents.files &&
-      formData.documents.files.length > 0
-    ) {
-      console.log("Fetching attachments from Cloudinary...");
-      for (const file of formData.documents.files) {
-        // Ensure the file object and its path are valid before fetching
-        if (file && file.path) {
-          try {
-            // Fetch the file from the Cloudinary URL
-            const response = await fetch(file.path);
-            if (!response.ok) {
-              // Log the error but don't stop the whole process for one failed file
-              console.error(
-                `Failed to fetch attachment ${file.name} from cloud storage. Status: ${response.status}`
-              );
-              continue; // Skip this file and try the next one
-            }
+    // 3. Generate Secure Download Links from Cloudinary
+    const documentLinks = [];
 
-            // Get the file content as a raw Buffer
-            const content = Buffer.from(await response.arrayBuffer());
-
-            // Add the prepared attachment object to our array
-            attachmentsWithContent.push({
-              filename: file.name,
-              content: content, // This is the raw file data
-              contentType:
-                response.headers.get("content-type") ||
-                "application/octet-stream",
-            });
-          } catch (fetchError) {
-            console.error(
-              `Could not process attachment: ${file.name}`,
-              fetchError
-            );
-          }
-        }
-      }
-      // This log is crucial for debugging
+    if (formData.documents?.files?.length > 0) {
       console.log(
-        `Successfully prepared ${attachmentsWithContent.length} attachments.`
+        `Generating secure links for ${formData.documents.files.length} documents...`
+      );
+
+      for (const file of formData.documents.files as CloudinaryFile[]) {
+        if (!file?.public_id) {
+          console.warn("Skipping file due to missing public_id:", file);
+          continue;
+        }
+
+        const extension = file.name.split(".").pop();
+        if (!extension) {
+          console.warn(
+            `Could not determine extension for ${file.name}, skipping.`
+          );
+          continue;
+        }
+
+        // Generate a signed URL that forces download and expires in 7 days
+        const signedUrl = cloudinary.utils.private_download_url(
+          file.public_id,
+          extension,
+          {
+            resource_type: file.resource_type,
+            type: "upload",
+            attachment: true, // This is a hint to the browser to download, not display
+            expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // Link is valid for 7 days
+          }
+        );
+
+        documentLinks.push({
+          name: file.name,
+          url: signedUrl,
+        });
+      }
+      console.log(
+        `Successfully generated ${documentLinks.length} secure links.`
       );
     }
 
-    // --- 4. Send the CRITICAL Admin Notification Email ---
+    // 4. Send the Admin Notification Email
     try {
       await sendApplicationEmail({
         formData: formData,
@@ -106,11 +115,9 @@ export async function POST(request: NextRequest) {
           amount: paymentIntent.amount,
           currency: paymentIntent.currency,
         },
-        // Pass the array of attachments that now contains the file content
-        attachments: attachmentsWithContent,
+        documentLinks: documentLinks,
       });
     } catch (adminEmailError: any) {
-      // If this specific step fails, we stop and return a detailed error
       console.error(
         "CRITICAL: Admin notification email failed!",
         adminEmailError
@@ -123,9 +130,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // --- 5. Send the User Confirmation Email ---
-    // This is a "fire-and-forget" call; we don't stop the process if it fails.
-    // The function itself will log any errors.
+    // 5. Send the User Confirmation Email (with the corrected 'paymentDetails' object)
     await sendUserConfirmationEmail({
       formData: formData,
       paymentDetails: {
@@ -134,17 +139,14 @@ export async function POST(request: NextRequest) {
         amount: paymentIntent.amount,
         currency: paymentIntent.currency,
       },
-      // We don't send attachments to the user
-      attachments: [],
     });
 
-    // --- 6. Return Final Success Response to the Frontend ---
+    // 6. Return Final Success Response to Frontend
     return NextResponse.json(
       { success: true, message: "Application finalized successfully." },
       { status: 200 }
     );
   } catch (error: any) {
-    // This is the main catch-all for other unexpected errors.
     console.error("Finalization API Error:", error);
     return NextResponse.json(
       { message: `An unexpected server error occurred: ${error.message}` },

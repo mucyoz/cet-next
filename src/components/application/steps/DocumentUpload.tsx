@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { type FormData as MasterFormData } from "../ApplicationFlow";
-import { documentsSchema } from "@/lib/schemas";
+import { documentsSchema } from "@/lib/schemas"; // Your source of truth
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -19,55 +19,41 @@ import { AlertCircle, File, Upload, X, Loader2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn } from "@/lib/utils";
 
-// Define the type for the props coming from the parent component
 interface DocumentUploadProps {
   formData: MasterFormData;
   updateFormData: (data: z.infer<typeof documentsSchema>) => void;
 }
 
-// Define a type for a single document object, including the server path
-type DocumentFile = {
-  id: string;
-  name: string;
-  type: string;
-  size: number;
-  file: string;
-  uploadDate: string;
-  path: string; // The path to the file on the server
-};
+// --- FIX 1: INFER THE TYPE FROM THE SCHEMA ---
+// This ensures your component's type is always in sync with your validation schema.
+type DocumentFile = z.infer<typeof documentsSchema>["files"][0];
 
 export function DocumentUpload({
   formData,
   updateFormData,
 }: DocumentUploadProps) {
-  // State for the list of documents, initialized from props
+  // --- FIX 2: THE INITIAL STATE ASSIGNMENT NOW WORKS ---
+  // Because DocumentFile and the schema type are identical, TypeScript is happy.
   const [documents, setDocuments] = useState<DocumentFile[]>(
     () => (formData.documents?.files as DocumentFile[]) || []
   );
 
-  // Local state for the upload form
   const [documentType, setDocumentType] = useState("");
   const [documentName, setDocumentName] = useState("");
   const [dragActive, setDragActive] = useState(false);
-  const [isUploading, setIsUploading] = useState(false); // New state for loading indicator
+  const [isUploading, setIsUploading] = useState(false);
 
-  // --- NEW ASYNC HANDLEFILE FUNCTION ---
   const handleFile = async (file: File) => {
-    // Keep all your existing validations for file type, documentType, and size
     if (!documentType) {
       alert("Please select a document type first.");
       return;
     }
-    // ... etc.
 
     setIsUploading(true);
-
-    // Create a FormData object to send the file to your backend API
     const uploadFormData = new FormData();
     uploadFormData.append("document", file);
 
     try {
-      // Call your backend API endpoint, which will handle the Cloudinary upload
       const response = await fetch("/api/upload-document", {
         method: "POST",
         body: uploadFormData,
@@ -76,26 +62,27 @@ export function DocumentUpload({
       const result = await response.json();
 
       if (!response.ok) {
-        // If the server returned an error, use its detailed message
         throw new Error(result.details || result.error || "Upload failed");
       }
 
-      // If the upload is successful, create the document object for your state
+      // --- FIX 3: CREATE THE OBJECT MATCHING THE NEW SCHEMA ---
       const newDocument: DocumentFile = {
-        id: Date.now().toString(),
-        name: documentName || file.name,
+        id: result.public_id, // Use the unique public_id for the React key
+        name: documentName || result.name,
         type: documentType,
         size: file.size,
-        file: file.name, // The original filename
         uploadDate: new Date().toISOString(),
-        path: result.path, // *** This path is now the secure Cloudinary URL ***
+        public_id: result.public_id,
+        resource_type: result.resource_type,
+        file: "",
       };
 
       const updatedDocuments = [...documents, newDocument];
       setDocuments(updatedDocuments);
+
+      // The updateFormData call is now valid because `updatedDocuments` matches the schema
       updateFormData({ files: updatedDocuments });
 
-      // Reset the form fields
       setDocumentType("");
       setDocumentName("");
     } catch (error: any) {
@@ -105,11 +92,11 @@ export function DocumentUpload({
       setIsUploading(false);
     }
   };
+
   const removeDocument = (id: string) => {
-    // Note: This only removes the entry from the list. It does not delete the file from the server.
-    // A more advanced implementation might call another API to delete the file.
     const updatedDocuments = documents.filter((doc) => doc.id !== id);
     setDocuments(updatedDocuments);
+    // The updateFormData call is also valid here
     updateFormData({ files: updatedDocuments });
   };
 
@@ -140,6 +127,7 @@ export function DocumentUpload({
 
   return (
     <div className="space-y-6">
+      {/* ... The rest of your JSX remains exactly the same ... */}
       <div className="space-y-2">
         <h2 className="text-2xl font-serif font-bold text-gray-900">
           Document Upload
