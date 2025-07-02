@@ -67,6 +67,8 @@ export const documentsSchema = z.object({
         size: z.number(),
         file: z.string(),
         uploadDate: z.string().datetime(),
+        public_id: z.string(),
+        resource_type: z.string(),
       })
     )
     .min(1, { message: "Please upload at least one document." }),
