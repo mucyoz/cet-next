@@ -13,4 +13,10 @@ if (!supabaseUrl || !supabaseAnonKey) {
   console.log("Supabase environment variables loaded successfully.");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    // These options are important for server-side clients
+    autoRefreshToken: false,
+    persistSession: false,
+  },
+});

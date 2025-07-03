@@ -2,41 +2,25 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { Stripe } from "stripe";
-import { v2 as cloudinary } from "cloudinary";
+import { supabase } from "../../../lib/supabase-client"; // NEW: Import our Supabase client
 import {
   sendApplicationEmail,
   sendUserConfirmationEmail,
 } from "../../../lib/emailService";
+// NEW: Import Attachment type
+import { Attachment } from "nodemailer/lib/mailer";
 
-// Define the shape of the file object coming from your frontend
-interface CloudinaryFile {
-  name: string;
-  public_id: string;
-  resource_type: string;
+// Define the shape of the file object coming from your frontend (now using `path`)
+interface SupabaseFile {
+  name: string; // Original filename
+  path: string; // Path in Supabase storage
 }
 
 // --- Environment Variable Checks & Service Initializations ---
-// This ensures your application fails to start if critical configuration is missing.
-if (
-  !process.env.STRIPE_SECRET_KEY ||
-  !process.env.CLOUDINARY_CLOUD_NAME ||
-  !process.env.CLOUDINARY_API_KEY ||
-  !process.env.CLOUDINARY_API_SECRET
-) {
-  console.error(
-    "FATAL: Missing critical environment variables for Stripe or Cloudinary."
-  );
+if (!process.env.STRIPE_SECRET_KEY) {
+  console.error("FATAL: Missing critical environment variable for Stripe.");
 }
-
-// Initialize Stripe
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {});
-
-// Configure Cloudinary
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
 
 // --- Main API Handler ---
 export async function POST(request: NextRequest) {
@@ -61,51 +45,48 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 3. Generate Secure Download Links from Cloudinary
-    const documentLinks = [];
+    // 3. NEW: Download Files from Supabase to create attachments
+    const attachmentsData: Attachment[] = []; // This will be passed to Nodemailer
 
     if (formData.documents?.files?.length > 0) {
       console.log(
-        `Generating secure links for ${formData.documents.files.length} documents...`
+        `Downloading ${formData.documents.files.length} files from Supabase...`
       );
 
-      for (const file of formData.documents.files as CloudinaryFile[]) {
-        if (!file?.public_id) {
-          console.warn("Skipping file due to missing public_id:", file);
+      for (const file of formData.documents.files as SupabaseFile[]) {
+        if (!file?.path) {
+          console.warn("Skipping file due to missing path:", file);
           continue;
         }
 
-        const extension = file.name.split(".").pop();
-        if (!extension) {
-          console.warn(
-            `Could not determine extension for ${file.name}, skipping.`
+        // Download the file content from the 'documents' bucket
+        const { data: blob, error: downloadError } = await supabase.storage
+          .from("attachments")
+          .download(file.path);
+
+        if (downloadError || !blob) {
+          console.error(
+            `Failed to download file from Supabase: ${file.path}`,
+            downloadError
           );
+          // Decide if you want to continue or fail the request
           continue;
         }
 
-        // Generate a signed URL that forces download and expires in 7 days
-        const signedUrl = cloudinary.utils.private_download_url(
-          file.public_id,
-          extension,
-          {
-            resource_type: file.resource_type,
-            type: "upload",
-            attachment: true, // This is a hint to the browser to download, not display
-            expires_at: Math.floor(Date.now() / 1000) + 60 * 60 * 24 * 30, // Link is valid for 7 days
-          }
-        );
+        // Convert the downloaded Blob into a Buffer for Nodemailer
+        const buffer = Buffer.from(await blob.arrayBuffer());
 
-        documentLinks.push({
-          name: file.name,
-          url: signedUrl,
+        attachmentsData.push({
+          filename: file.name, // The original user-friendly filename
+          content: buffer, // The file content
         });
       }
       console.log(
-        `Successfully generated ${documentLinks.length} secure links.`
+        `Successfully prepared ${attachmentsData.length} files as attachments.`
       );
     }
 
-    // 4. Send the Admin Notification Email
+    // 4. Send the Admin Notification Email with the attachments
     try {
       await sendApplicationEmail({
         formData: formData,
@@ -115,7 +96,7 @@ export async function POST(request: NextRequest) {
           amount: paymentIntent.amount,
           currency: paymentIntent.currency,
         },
-        documentLinks: documentLinks,
+        attachments: attachmentsData, // Pass the downloaded file data
       });
     } catch (adminEmailError: any) {
       console.error(
@@ -130,7 +111,7 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 5. Send the User Confirmation Email (with the corrected 'paymentDetails' object)
+    // 5. Send the User Confirmation Email
     await sendUserConfirmationEmail({
       formData: formData,
       paymentDetails: {
@@ -149,7 +130,7 @@ export async function POST(request: NextRequest) {
   } catch (error: any) {
     console.error("Finalization API Error:", error);
     return NextResponse.json(
-      { message: `An unexpected server error occurred : ${error.message}` },
+      { message: `An unexpected server error occurred: ${error.message}` },
       { status: 500 }
     );
   }

@@ -62,13 +62,15 @@ export const documentsSchema = z.object({
     .array(
       z.object({
         id: z.string(),
+        path: z.string(), // The path in Supabase Storage
+
         name: z.string(),
         type: z.string(),
         size: z.number(),
-        file: z.string(),
+        // file: z.string(),
         uploadDate: z.string().datetime(),
-        public_id: z.string(),
-        resource_type: z.string(),
+        // public_id: z.string(),
+        // resource_type: z.string(),
       })
     )
     .min(1, { message: "Please upload at least one document." }),

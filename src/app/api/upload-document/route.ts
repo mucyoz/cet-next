@@ -1,12 +1,8 @@
 // /app/api/upload-document/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { v2 as cloudinary } from "cloudinary";
 
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
-});
+import { NextRequest, NextResponse } from "next/server";
+import { supabase } from "../../../lib/supabase-client"; // NEW: Import our Supabase client
+import { randomUUID } from "crypto"; // NEW: To generate unique filenames
 
 export async function POST(request: NextRequest) {
   try {
@@ -17,31 +13,31 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: "No file provided." }, { status: 400 });
     }
 
-    const buffer = Buffer.from(await file.arrayBuffer());
+    // NEW: Create a unique path for the file to prevent overwrites
+    const fileExtension = file.name.split(".").pop();
+    const uniqueFilename = `${randomUUID()}.${fileExtension}`;
+    const filePath = `user-uploads/${uniqueFilename}`; // A subfolder for organization
 
-    const result: any = await new Promise((resolve, reject) => {
-      // Don't set public_id, let Cloudinary create a unique one
-      const uploadStream = cloudinary.uploader.upload_stream(
-        {
-          resource_type: "raw", // Keep as 'raw' for private by default
-        },
-        (error, result) => {
-          if (error) return reject(error);
-          resolve(result);
-        }
-      );
-      uploadStream.end(buffer);
-    });
+    // NEW: Upload file to Supabase Storage
+    const { error: uploadError } = await supabase.storage
+      .from("attachments") // This is the bucket name you created
+      .upload(filePath, file, {
+        cacheControl: "3600",
+        upsert: false, // Don't allow overwriting existing files
+      });
 
-    // --- IMPORTANT CHANGE ---
-    // Return the public_id and resource_type, not just the URL
+    if (uploadError) {
+      console.error("Supabase upload error:", uploadError);
+      throw new Error(uploadError.message);
+    }
+
+    // IMPORTANT CHANGE: Return the `path` of the file, not a public_id.
+    // The frontend will need this `path` to tell the finalize endpoint which file to fetch.
     return NextResponse.json(
       {
         message: "Upload successful",
-        // Pass back all the info needed for the next step
-        name: file.name, // Keep the original filename for display
-        public_id: result.public_id,
-        resource_type: result.resource_type,
+        name: file.name, // The original filename for display purposes
+        path: filePath, // The unique path in Supabase Storage
       },
       { status: 200 }
     );
