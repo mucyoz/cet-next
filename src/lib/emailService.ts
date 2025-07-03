@@ -1,14 +1,14 @@
 // lib/emailService.ts
 
 import nodemailer from "nodemailer";
+import { Attachment } from "nodemailer/lib/mailer";
 
 // --- Type Definitions ---
-// Defines the shape of the data passed to our email functions.
-// `documentLinks` is now the key property for the admin email.
 interface EmailParams {
-  formData: any; // Replace 'any' with a more specific type if you have one for your form data
-  paymentDetails: any; // Replace 'any' with a more specific type for payment details
-  documentLinks?: { name: string; url: string }[]; // This is optional as the user email won't have it
+  formData: any;
+  paymentDetails: any;
+  // CHANGED: This property is now for actual attachment data, not links.
+  attachments?: Attachment[];
 }
 
 // --- Nodemailer Transporter (No Changes Needed) ---
@@ -40,17 +40,14 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Sends the main application notification email to the admin.
- * This email contains links to the uploaded documents instead of attachments.
- * @param {EmailParams} params - The email parameters, including form data and document links.
+ * CHANGED: This email now contains the actual files as attachments.
+ * @param {EmailParams} params - The email parameters, including form data and attachments.
  */
-// This is the updated function for your lib/emailService.ts file
-
 export async function sendApplicationEmail({
   formData,
   paymentDetails,
-  documentLinks,
+  attachments, // CHANGED: We now receive attachments here
 }: EmailParams) {
-  // Destructure for easier access to all parts of the form data
   const { personalInfo, education, selectedPackage } = formData;
 
   // --- 1. Generate HTML for each section based on the schema ---
@@ -131,19 +128,13 @@ export async function sendApplicationEmail({
     </ul>
   `;
 
-  // Documents Section (using secure links)
   const documentsHtml = `
-    <h2 style="color: #0056b3;">5. Documents (Secure Download Links)</h2>
-    <p>The following documents are available for secure download for the next 30 days.</p>
+    <h2 style="color: #0056b3;">5. Attached Documents</h2>
+    <p>The following documents have been attached to this email.</p>
     <ul>
       ${
-        documentLinks && documentLinks.length > 0
-          ? documentLinks
-              .map(
-                (doc) =>
-                  `<li><a href="${doc.url}" style="color: #0056b3;">${doc.name}</a></li>`
-              )
-              .join("")
+        attachments && attachments.length > 0
+          ? attachments.map((doc) => `<li>${doc.filename}</li>`).join("")
           : "<li>No documents were uploaded.</li>"
       }
     </ul>
@@ -176,6 +167,7 @@ export async function sendApplicationEmail({
       replyTo: personalInfo.email,
       subject: `New Application: ${personalInfo.firstName} ${personalInfo.lastName}`,
       html: emailHtml,
+      attachments: attachments,
     });
 
     console.log(

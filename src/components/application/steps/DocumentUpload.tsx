@@ -67,14 +67,12 @@ export function DocumentUpload({
 
       // --- FIX 3: CREATE THE OBJECT MATCHING THE NEW SCHEMA ---
       const newDocument: DocumentFile = {
-        id: result.public_id, // Use the unique public_id for the React key
+        id: result.path, // Use the unique public_id for the React key
+        path: result.path,
         name: documentName || result.name,
         type: documentType,
         size: file.size,
         uploadDate: new Date().toISOString(),
-        public_id: result.public_id,
-        resource_type: result.resource_type,
-        file: "",
       };
 
       const updatedDocuments = [...documents, newDocument];
