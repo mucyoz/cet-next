@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -9,156 +8,33 @@ import {
   Globe,
   Shield,
   Award,
-  X,
   Clock,
   Target,
   Briefcase,
   DollarSign,
   HeartHandshake,
-  Menu,
   FileCheck,
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { PricingCard } from "./PricingCard";
 import { Testimonials } from "./Testimonials";
-import { Logo } from "../shared/Logo";
 import { useRouter } from "next/navigation";
+import { Header } from "../shared/Header";
+import { Footer } from "../shared/Footer";
 
 // The component is now self-contained and doesn't need props for navigation.
 export default function HomePage() {
-  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const router = useRouter();
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
 
   const handleStartApplication = () => {
+    // Use router.push for programmatic navigation
     router.push("/application");
-  };
-
-  const handleMobileLinkClick = () => {
-    setMobileMenuOpen(false);
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <header className="glassmorphism py-3 sm:py-4 sticky top-0 z-50 border-b">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center min-w-0 flex-1 sm:flex-none">
-              <Link href="/" aria-label="Go to homepage">
-                <Logo size="md" className="focus:ring-offset-0" />
-              </Link>
-            </div>
-
-            {/* Desktop Navigation */}
-            <nav className="hidden md:flex space-x-6 lg:space-x-8">
-              <Link
-                href="/"
-                className="flex items-center text-gray-600 hover:text-gray-900 font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap"
-              >
-                Services
-              </Link>
-              <Link
-                href="/"
-                className="flex items-center text-gray-600 hover:text-gray-900 font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap"
-              >
-                How It Works
-              </Link>
-              <Link
-                href="/"
-                className="flex items-center text-gray-600 hover:text-gray-900 font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap"
-              >
-                FAQ
-              </Link>
-              <Link
-                href="/"
-                className="flex items-center text-gray-600 hover:text-gray-900 font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap"
-              >
-                For Orgs
-              </Link>
-            </nav>
-
-            {/* Mobile Menu Button */}
-            <div className="md:hidden flex items-center space-x-2">
-              <Button
-                asChild
-                onClick={handleStartApplication}
-                className="gradient-bg hover:opacity-90 text-white text-xs px-3 py-2 min-h-[36px] whitespace-nowrap"
-              >
-                <span className="cursor-pointer">Start</span>
-              </Button>
-              <button
-                onClick={toggleMobileMenu}
-                className="text-gray-600 hover:text-gray-900 p-2 min-h-[44px] min-w-[44px] flex items-center justify-center"
-                aria-label="Toggle mobile menu"
-              >
-                {mobileMenuOpen ? (
-                  <X className="h-6 w-6" />
-                ) : (
-                  <Menu className="h-6 w-6" />
-                )}
-              </button>
-            </div>
-
-            {/* Desktop CTA Button */}
-            <div className="hidden md:block">
-              <Button
-                asChild
-                onClick={handleStartApplication}
-                className="flex-1 h-full gradient-bg hover:opacity-90 text-white text-sm md:text-base px-4 md:px-6 py-2 whitespace-nowrap"
-              >
-                <span className="cursor-pointer">Start Your Evaluation</span>
-              </Button>
-            </div>
-          </div>
-
-          {/* Mobile Navigation Menu */}
-          <AnimatePresence>
-            {mobileMenuOpen && (
-              <motion.div
-                initial={{ opacity: 0, height: 0 }}
-                animate={{ opacity: 1, height: "auto" }}
-                exit={{ opacity: 0, height: 0 }}
-                transition={{ duration: 0.3, ease: "easeInOut" }}
-                className="md:hidden mt-4 border-t border-gray-200 pt-4 overflow-hidden"
-              >
-                <nav className="flex flex-col space-y-2">
-                  <Link
-                    href="/"
-                    onClick={handleMobileLinkClick}
-                    className="text-left text-gray-600 hover:text-gray-900 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 min-h-[48px]"
-                  >
-                    Services
-                  </Link>
-                  <Link
-                    href="/"
-                    onClick={handleMobileLinkClick}
-                    className="text-left text-gray-600 hover:text-gray-900 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 min-h-[48px]"
-                  >
-                    How It Works
-                  </Link>
-                  <Link
-                    href="/"
-                    onClick={handleMobileLinkClick}
-                    className="text-left text-gray-600 hover:text-gray-900 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 min-h-[48px]"
-                  >
-                    FAQ
-                  </Link>
-                  <Link
-                    href="/"
-                    onClick={handleMobileLinkClick}
-                    className="text-left text-gray-600 hover:text-gray-900 font-medium py-3 px-4 rounded-lg hover:bg-gray-50 transition-colors duration-200 min-h-[48px]"
-                  >
-                    For Orgs
-                  </Link>
-                </nav>
-              </motion.div>
-            )}
-          </AnimatePresence>
-        </div>
-      </header>
+      <Header />
 
       <main>
         <section className="pt-8 sm:pt-16 md:pt-24 pb-12 sm:pb-16 px-4">
@@ -563,77 +439,7 @@ export default function HomePage() {
             </Card>
           </div>
         </section>
-
-        <footer className="bg-gray-900 text-gray-300 py-12 sm:py-16">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 sm:gap-12">
-              <div className="sm:col-span-2 md:col-span-1">
-                <div className="mb-4 sm:mb-6">
-                  <Link href="/" className="text-white hover:opacity-80">
-                    <Logo size="lg" showText={true} />
-                  </Link>
-                </div>
-                <p className="text-gray-400 text-sm sm:text-base leading-relaxed">
-                  Complete credential evaluation services combined with
-                  education transition support for international professionals
-                  and students seeking opportunities in the United States.
-                </p>
-              </div>
-              {[
-                {
-                  title: "Services",
-                  links: [
-                    "Credential Evaluation",
-                    "Education Transition",
-                    "Professional Coaching",
-                    "Academic Guidance",
-                  ],
-                },
-                {
-                  title: "Resources",
-                  links: [
-                    "FAQ",
-                    "Processing Times",
-                    "Document Requirements",
-                    "Success Resources",
-                  ],
-                },
-                {
-                  title: "Support",
-                  links: [
-                    "Contact Us",
-                    "Track Application",
-                    "Customer Service",
-                    "Privacy Policy",
-                    "Terms of Service",
-                  ],
-                },
-              ].map((section, i) => (
-                <div key={i}>
-                  <h4 className="text-white font-bold mb-4 sm:mb-6 text-sm sm:text-base">
-                    {section.title}
-                  </h4>
-                  <ul className="space-y-2 sm:space-y-3">
-                    {section.links.map((link, j) => (
-                      <li key={j}>
-                        <a
-                          href="#"
-                          className="text-gray-400 hover:text-white transition-colors duration-200 hover-lift inline-block text-sm sm:text-base"
-                        >
-                          {link}
-                        </a>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              ))}
-            </div>
-            <div className="border-t border-gray-800 mt-12 sm:mt-16 pt-6 sm:pt-8 text-center text-xs sm:text-sm text-gray-400">
-              © {new Date().getFullYear()} Center for Education Transitions. All
-              rights reserved.
-            </div>
-          </div>
-        </footer>
+        <Footer />
       </main>
     </div>
   );
