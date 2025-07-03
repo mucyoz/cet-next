@@ -20,19 +20,21 @@ const navigationItems = [
 
 export function Header() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const pathname = usePathname(); // Gets the current URL path, e.g., "/services"
+  const pathname = usePathname();
   const router = useRouter();
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
   };
 
+  // THE FIX IS HERE: Use a setTimeout to delay closing the menu
   const handleMobileLinkClick = () => {
-    setMobileMenuOpen(false);
+    setTimeout(() => {
+      setMobileMenuOpen(false);
+    }, 150);
   };
 
   const handleStartApplication = () => {
-    // Use router.push for programmatic navigation
     router.push("/application");
   };
 
@@ -111,7 +113,7 @@ export function Header() {
                   <Link
                     key={item.href}
                     href={item.href}
-                    onClick={handleMobileLinkClick}
+                    onClick={handleMobileLinkClick} // This now works correctly
                     className={cn(
                       "text-left font-medium py-3 px-4 rounded-lg transition-colors duration-200 min-h-[48px]",
                       pathname === item.href
