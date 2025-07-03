@@ -1,3 +1,5 @@
+"use client";
+
 import { JSX, useState } from "react";
 import { motion } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
@@ -19,8 +21,9 @@ import {
   Shield,
   Briefcase,
 } from "lucide-react";
-import { Navigation } from "../shared/Navigation";
 import { Footer } from "../shared/Footer";
+import { useRouter } from "next/navigation";
+import { Header } from "../shared/Header";
 
 interface FAQCategory {
   icon: JSX.Element;
@@ -29,19 +32,6 @@ interface FAQCategory {
     q: string;
     a: string | JSX.Element;
   }>;
-}
-
-interface FAQPageProps {
-  onStart: () => void;
-  setCurrentPage: (
-    page:
-      | "home"
-      | "services"
-      | "howItWorks"
-      | "faq"
-      | "application"
-      | "employers"
-  ) => void;
 }
 
 const faqCategories: FAQCategory[] = [
@@ -215,7 +205,12 @@ const faqCategories: FAQCategory[] = [
   },
 ];
 
-export default function FAQPage({ onStart, setCurrentPage }: FAQPageProps) {
+export default function FAQPage() {
+  const router = useRouter();
+  const handleStartApplication = () => {
+    // Use router.push for programmatic navigation
+    router.push("/application");
+  };
   const [searchQuery, setSearchQuery] = useState("");
 
   const filteredCategories = faqCategories
@@ -232,12 +227,7 @@ export default function FAQPage({ onStart, setCurrentPage }: FAQPageProps) {
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <Navigation
-        currentPage="faq"
-        setCurrentPage={setCurrentPage}
-        onStart={onStart}
-        showBackButton={true}
-      />
+      <Header />
 
       <main className="max-w-5xl mx-auto px-4 py-6 sm:py-8 lg:py-16">
         <motion.div
@@ -319,7 +309,7 @@ export default function FAQPage({ onStart, setCurrentPage }: FAQPageProps) {
                 the process.
               </p>
               <Button
-                onClick={onStart}
+                onClick={handleStartApplication}
                 className="gradient-bg hover:opacity-90 text-sm sm:text-base lg:text-lg px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6 w-full sm:w-auto min-h-[44px] sm:min-h-[48px]"
               >
                 Start Your Application
@@ -329,7 +319,7 @@ export default function FAQPage({ onStart, setCurrentPage }: FAQPageProps) {
         </motion.div>
       </main>
 
-      <Footer setCurrentPage={setCurrentPage} />
+      <Footer />
     </div>
   );
 }

@@ -17,34 +17,19 @@ import {
   Phone,
   ArrowRight,
 } from "lucide-react";
-import { Navigation } from "../shared/Navigation";
 import { Footer } from "../shared/Footer";
+import { Header } from "../shared/Header";
+import { useRouter } from "next/navigation";
 
-interface EmployersPageProps {
-  onStart: () => void;
-  setCurrentPage: (
-    page:
-      | "home"
-      | "services"
-      | "howItWorks"
-      | "faq"
-      | "application"
-      | "employers"
-  ) => void;
-}
-
-export default function EmployersPage({
-  onStart,
-  setCurrentPage,
-}: EmployersPageProps) {
+export default function EmployersPage() {
+  const router = useRouter();
+  const handleStartApplication = () => {
+    // Use router.push for programmatic navigation
+    router.push("/application");
+  };
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <Navigation
-        currentPage="employers"
-        setCurrentPage={setCurrentPage}
-        onStart={onStart}
-        showBackButton={true}
-      />
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-16">
         {/* Header Section */}
@@ -445,7 +430,7 @@ export default function EmployersPage({
               <div className="space-y-2 sm:space-y-3 lg:space-y-4">
                 <div className="flex justify-center">
                   <Button
-                    onClick={onStart}
+                    onClick={handleStartApplication}
                     className="bg-blue-600 hover:bg-blue-700 text-white text-xs sm:text-sm md:text-base lg:text-lg px-3 sm:px-4 md:px-6 lg:px-8 py-2 sm:py-3 md:py-4 lg:py-6 rounded-lg shadow-md hover:shadow-lg transition-all duration-300 w-full sm:w-auto max-w-sm min-h-[44px] sm:min-h-[48px]"
                   >
                     <span className="block sm:hidden">Request Evaluation</span>
@@ -469,7 +454,7 @@ export default function EmployersPage({
         </section>
       </main>
 
-      <Footer setCurrentPage={setCurrentPage} />
+      <Footer />
     </div>
   );
 }

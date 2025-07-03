@@ -16,7 +16,9 @@ export const personalInfoSchema = z.object({
   country: z
     .string()
     .min(1, { message: "Please select your country of origin." }),
-  address: z.string().min(5, { message: "Please enter your full address." }),
+  address: z.string().min(2, {
+    message: "Please enter your full address. Must be at least 2 characters.",
+  }),
   city: z.string().min(2, { message: "Please enter your city." }),
   state: z.string().optional(),
   zipCode: z
@@ -27,19 +29,40 @@ export const personalInfoSchema = z.object({
 /**
  * Schema for a single education entry, to be used within an array.
  */
-const educationEntrySchema = z.object({
-  institution: z.string().min(2, { message: "Institution name is required." }),
-  country: z.string().min(1, { message: "Country is required." }),
-  degreeType: z.string().min(1, { message: "Degree type is required." }),
-  fieldOfStudy: z.string().min(2, { message: "Field of study is required." }),
-  startYear: z
-    .string()
-    .regex(/^\d{4}$/, { message: "A valid start year is required." }),
-  endYear: z
-    .string()
-    .regex(/^\d{4}$/, { message: "A valid end year is required." }),
-  gpa: z.string().optional(),
-});
+export const educationEntrySchema = z
+  .object({
+    institution: z
+      .string()
+      .min(2, { message: "Institution name is required." }),
+    country: z.string().min(1, { message: "Country is required." }),
+    degreeType: z.string().min(1, { message: "Degree type is required." }),
+    fieldOfStudy: z.string().min(2, { message: "Field of study is required." }),
+    startYear: z
+      .string()
+      .min(1, { message: "A valid start year is required." }), // Use .min(1) instead of regex for better empty-string checking
+    endYear: z.string().min(1, { message: "A valid end year is required." }), // Use .min(1) here as well
+    gpa: z.string().optional(),
+  })
+  .refine(
+    // The validator function: receives the object's data
+    (data) => {
+      // This logic runs only if both years have a value.
+      // It returns true (valid) if endYear is the same as or later than startYear.
+      if (data.startYear && data.endYear) {
+        return data.endYear >= data.startYear;
+      }
+      // If one or both fields are empty, we let the individual field validation
+      // handle the error, so this refinement passes.
+      return true;
+    },
+    // The configuration object
+    {
+      // The error message to display
+      message: "End year cannot be before the start year.",
+      // The field to attach this error message to in the UI
+      path: ["endYear"],
+    }
+  );
 
 /**
  * Schema for the Education History step. The top-level is an object

@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
-import { educationSchema } from "@/lib/schemas"; // 1. Import from central schema file
-import { type FormData as MasterFormData } from "../ApplicationFlow"; // 2. Import master FormData type
+import { educationSchema } from "@/lib/schemas";
+import { type FormData as MasterFormData } from "../ApplicationFlow";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import {
@@ -27,13 +27,12 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PlusCircle, Trash2 } from "lucide-react";
 import { countries } from "@/data/countries";
 
-// The schema for a SINGLE education entry (for the "Add" form)
-// The main schema for the whole step is imported.
+// The schema for a SINGLE education entry, derived from the main schema
 const singleEducationEntrySchema =
   educationSchema.shape.educationHistory.element;
 
 interface EducationFormProps {
-  formData: MasterFormData; // 3. Expect the full FormData object
+  formData: MasterFormData;
   updateFormData: (data: z.infer<typeof educationSchema>) => void;
 }
 
@@ -41,10 +40,10 @@ export function EducationForm({
   formData,
   updateFormData,
 }: EducationFormProps) {
-  // 4. Initialize internal list state from the correct slice of the prop
-  const [educationHistory, setEducationHistory] = useState<any[]>(
-    () => formData.education?.educationHistory || []
-  );
+  // Initialize internal list state from the props
+  const [educationHistory, setEducationHistory] = useState<
+    z.infer<typeof singleEducationEntrySchema>[]
+  >(() => formData.education?.educationHistory || []);
 
   const form = useForm<z.infer<typeof singleEducationEntrySchema>>({
     resolver: zodResolver(singleEducationEntrySchema),
@@ -59,25 +58,42 @@ export function EducationForm({
     },
   });
 
+  // WATCH the startYear field to dynamically update the endYear options
+  const selectedStartYear = form.watch("startYear");
+
+  // Function to add a new, validated education entry
   const addEducation = (data: z.infer<typeof singleEducationEntrySchema>) => {
     const updatedHistory = [...educationHistory, data];
     setEducationHistory(updatedHistory);
-    // Update the parent with the complete object structure for this step
     updateFormData({ educationHistory: updatedHistory });
-    form.reset();
+    form.reset(); // Reset the form fields for the next entry
   };
 
+  // Function to remove an education entry
   const removeEducation = (index: number) => {
     const updatedHistory = educationHistory.filter((_, i) => i !== index);
     setEducationHistory(updatedHistory);
-    // Update the parent with the complete object structure for this step
     updateFormData({ educationHistory: updatedHistory });
   };
 
+  // Generate years array in descending order
   const currentYear = new Date().getFullYear();
   const years = Array.from({ length: 70 }, (_, i) =>
     (currentYear - i).toString()
   );
+
+  // FILTER the options for the End Year dropdown based on the selected start year
+  const endYearOptions = selectedStartYear
+    ? years.filter((year) => year >= selectedStartYear)
+    : years;
+
+  // Good UX: Automatically clear endYear if startYear changes and makes it invalid
+  useEffect(() => {
+    const currentEndYear = form.getValues("endYear");
+    if (currentEndYear && selectedStartYear > currentEndYear) {
+      form.setValue("endYear", ""); // Clear the invalid selection
+    }
+  }, [selectedStartYear, form]);
 
   return (
     <div className="space-y-6">
@@ -136,7 +152,6 @@ export function EducationForm({
               className="space-y-6"
             >
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                {/* 5. Use cleaner <FormField> instead of <Controller> */}
                 <FormField
                   control={form.control}
                   name="institution"
@@ -235,7 +250,7 @@ export function EducationForm({
               <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                 <FormField
                   control={form.control}
-                  name="startYear"
+                  name="startYear" // THE FIX: Corrected name
                   render={({ field }) => (
                     <FormItem>
                       <FormLabel>Start Year *</FormLabel>
@@ -248,7 +263,7 @@ export function EducationForm({
                             <SelectValue placeholder="Select year" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
+                        <SelectContent className="h-[200px] overflow-y-auto">
                           {years.map((year) => (
                             <SelectItem key={year} value={year}>
                               {year}
@@ -268,15 +283,16 @@ export function EducationForm({
                       <FormLabel>End Year *</FormLabel>
                       <Select
                         onValueChange={field.onChange}
-                        defaultValue={field.value}
+                        value={field.value} // Use 'value' for controlled behavior
                       >
                         <FormControl>
                           <SelectTrigger>
                             <SelectValue placeholder="Select year" />
                           </SelectTrigger>
                         </FormControl>
-                        <SelectContent>
-                          {years.map((year) => (
+                        <SelectContent className="max-h-[200px] overflow-y-auto">
+                          {/* Map over the DYNAMICALLY FILTERED options */}
+                          {endYearOptions.map((year) => (
                             <SelectItem key={year} value={year}>
                               {year}
                             </SelectItem>

@@ -17,34 +17,19 @@ import {
   // Briefcase,
   // BookOpen,
 } from "lucide-react";
-import { Navigation } from "../shared/Navigation";
 import { Footer } from "../shared/Footer";
+import { Header } from "../shared/Header";
+import { useRouter } from "next/navigation";
 
-interface HowItWorksPageProps {
-  onStart: () => void;
-  setCurrentPage: (
-    page:
-      | "home"
-      | "services"
-      | "howItWorks"
-      | "faq"
-      | "application"
-      | "employers"
-  ) => void;
-}
-
-export default function HowItWorksPage({
-  onStart,
-  setCurrentPage,
-}: HowItWorksPageProps) {
+export default function HowItWorksPage() {
+  const router = useRouter();
+  const handleStartApplication = () => {
+    // Use router.push for programmatic navigation
+    router.push("/application");
+  };
   return (
     <div className=" min-h-screen bg-gradient-to-b from-white to-gray-50">
-      <Navigation
-        currentPage="howItWorks"
-        setCurrentPage={setCurrentPage}
-        onStart={onStart}
-        showBackButton={true}
-      />
+      <Header />
 
       <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8 lg:py-16">
         <section className="text-center mb-8 sm:mb-12 lg:mb-16">
@@ -357,7 +342,7 @@ export default function HowItWorksPage({
                 pathway roadmap in 5 business days or less.
               </p>
               <Button
-                onClick={onStart}
+                onClick={handleStartApplication}
                 className="gradient-bg hover:opacity-90 text-sm sm:text-base lg:text-lg px-4 sm:px-6 lg:px-8 py-3 sm:py-4 lg:py-6 w-full sm:w-auto min-h-[44px] sm:min-h-[48px]"
               >
                 Start Your Education Transition
@@ -367,7 +352,7 @@ export default function HowItWorksPage({
         </section>
       </main>
 
-      <Footer setCurrentPage={setCurrentPage} />
+      <Footer />
     </div>
   );
 }
