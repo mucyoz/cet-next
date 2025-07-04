@@ -105,8 +105,8 @@ export function PackageSelection({
   formData,
   updateFormData,
 }: PackageSelectionProps) {
-  const [selectedPackageId, setSelectedPackageId] = useState<string>(
-    () => formData.selectedPackage?.id || "career-success"
+  const [selectedPackageId, setSelectedPackageId] = useState<string | null>( // Allow null
+    () => formData.selectedPackage?.id || null // Default to null
   );
 
   const handlePackageChange = (packageId: string) => {

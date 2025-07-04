@@ -7,7 +7,7 @@ import {
   FileCheck,
   Package,
   CheckCircle2,
-  PhoneCall,
+  // PhoneCall,
   Mail,
   MessageCircle,
   Shield,
@@ -279,7 +279,7 @@ export default function HowItWorksPage() {
                 </p>
 
                 <div className="space-y-3 sm:space-y-4 lg:space-y-6">
-                  <div className="flex items-center">
+                  {/* <div className="flex items-center">
                     <div className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
                       <PhoneCall className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-blue-600" />
                     </div>
@@ -291,7 +291,7 @@ export default function HowItWorksPage() {
                         1-800-EVAL-123 (1-800-382-5123)
                       </p>
                     </div>
-                  </div>
+                  </div> */}
 
                   <div className="flex items-center">
                     <div className="h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 rounded-full bg-blue-100 flex items-center justify-center mr-3 sm:mr-4 flex-shrink-0">
@@ -302,7 +302,7 @@ export default function HowItWorksPage() {
                         Email Support
                       </p>
                       <p className="text-blue-600 text-xs sm:text-sm lg:text-base break-all">
-                        support@centereducationtransitions.com
+                        support@educationtransitions.com
                       </p>
                     </div>
                   </div>

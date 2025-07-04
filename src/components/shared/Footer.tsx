@@ -20,7 +20,7 @@ export function Footer() {
       { label: "Success Resources", href: "/services" }, // Or link to a future /blog page
     ],
     Support: [
-      { label: "Contact Us", href: "/contact" },
+      { label: "Contact Us", href: "/contact-us" },
       { label: "Track Application", href: "/" },
       { label: "Privacy Policy", href: "/" },
       { label: "Terms of Service", href: "/" },
