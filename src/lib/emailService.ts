@@ -247,7 +247,7 @@ export async function sendUserConfirmationEmail({
   // --- The rest of the function remains the same ---
   try {
     await transporter.sendMail({
-      from: `"[Your Company Name]" <${process.env.EMAIL_USER}>`,
+      from: `"Center for Education Transitions" <${process.env.EMAIL_USER}>`,
       to: personalInfo.email, // Send to the applicant
       replyTo: process.env.ADMIN_EMAIL,
       subject: "We've Received Your Application!",
