@@ -14,7 +14,7 @@ import {
   Building,
   // GraduationCap,
   Mail,
-  Phone,
+  // Phone,
   ArrowRight,
 } from "lucide-react";
 import { Footer } from "../shared/Footer";

@@ -7,7 +7,7 @@ import {
   FileCheck,
   Package,
   CheckCircle2,
-  PhoneCall,
+  // PhoneCall,
   Mail,
   MessageCircle,
   Shield,

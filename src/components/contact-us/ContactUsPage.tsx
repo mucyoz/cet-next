@@ -7,7 +7,7 @@ import {
   CheckCircle2,
   Mail,
   MessageCircle,
-  PhoneCall,
+  // PhoneCall,
   Shield,
 } from "lucide-react";
 import { motion } from "framer-motion";
