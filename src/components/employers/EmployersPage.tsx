@@ -359,7 +359,7 @@ export default function EmployersPage() {
                     Verification Contact
                   </h3>
                   <div className="space-y-2 sm:space-y-3 lg:space-y-4">
-                    <div className="flex items-center">
+                    {/* <div className="flex items-center">
                       <Phone className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0" />
                       <div className="min-w-0">
                         <p className="font-medium text-xs sm:text-sm lg:text-base">
@@ -369,7 +369,7 @@ export default function EmployersPage() {
                           1-800-VERIFY-1 (1-800-837-4391)
                         </p>
                       </div>
-                    </div>
+                    </div> */}
                     <div className="flex items-center">
                       <Mail className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-green-600 mr-2 sm:mr-3 flex-shrink-0" />
                       <div className="min-w-0">
@@ -377,14 +377,14 @@ export default function EmployersPage() {
                           Email Verification
                         </p>
                         <p className="text-green-600 text-xs sm:text-sm lg:text-base break-all">
-                          verify@centereducationtransitions.com
+                          support@eductransitions.com
                         </p>
                       </div>
                     </div>
                     <p className="text-xs sm:text-sm text-gray-600 mt-2 sm:mt-3 lg:mt-4">
                       Available Monday-Friday, 9 AM - 6 PM EST
                       <br />
-                      Average verification time: Under 2 minutes
+                      Average verification time: Under 30 minutes
                     </p>
                   </div>
                 </div>
@@ -445,7 +445,7 @@ export default function EmployersPage() {
                   Questions about our services? Contact our organization
                   relations team at{" "}
                   <span className="text-blue-600 font-medium break-all">
-                    organizations@centereducationtransitions.com
+                    support@educationtransitions.com
                   </span>
                 </p>
               </div>
