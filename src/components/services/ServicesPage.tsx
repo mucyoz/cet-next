@@ -39,13 +39,10 @@ export default function ServicesPage() {
             className="space-y-3 sm:space-y-4 lg:space-y-6"
           >
             <h1 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-3 sm:mb-4 lg:mb-6 px-2">
-              Complete Education Transition Solutions
+              Professional Credential Evaluation & Career Advancement
             </h1>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto px-4">
-              The thorough credential evaluation service that combines your
-              international credentials with an actionable American career
-              success strategy. Get your evaluation PLUS a Career pathway
-              roadmap in 5 business days or less.
+              The thorough credential evaluation service that combines your internationally earned credentials with an actionable U.S. career advancement strategy. Get your evaluation PLUS a career pathway roadmap in 5 business days or less.
             </p>
 
             {/* Service Options Notice */}
@@ -57,12 +54,7 @@ export default function ServicesPage() {
                     Complete Evaluation Services
                   </p>
                   <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
-                    We offer <strong>document-by-document evaluations</strong>{" "}
-                    for employment, immigration, and community college
-                    admission, and <strong>course-by-course evaluations</strong>{" "}
-                    for university admissions, professional licensing, and
-                    transfer credit. All evaluations include detailed education
-                    transition support.
+                    We offer <strong>document-by-document evaluations</strong> for employment opportunities and <strong>course-by-course evaluations</strong> for professional licensing and career advancement. All evaluations include detailed career transition support.
                   </p>
                 </div>
               </div>
@@ -88,10 +80,10 @@ export default function ServicesPage() {
               {
                 tier: "Tier 1",
                 title: "Essential Document Evaluation",
-                price: "$149",
+                price: "$199",
                 time: "7-10 business days",
                 description:
-                  "Perfect for employment, immigration, and community college admission",
+                  "Perfect for employment and professional opportunities",
                 color: "blue",
                 features: [
                   "Document-by-document evaluation",
@@ -106,10 +98,10 @@ export default function ServicesPage() {
               {
                 tier: "Tier 2",
                 title: "Professional Plus (Course-By-Course)",
-                price: "$229",
+                price: "$249",
                 time: "5-7 business days",
                 description:
-                  "Detailed academic analysis for university admissions and licensing",
+                  "Detailed credential analysis for professional licensing and career advancement",
                 color: "indigo",
                 features: [
                   "Course-by-course evaluation",
@@ -227,6 +219,13 @@ export default function ServicesPage() {
           </div>
         </section>
 
+        <div className="flex justify-center mb-8">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg px-6 py-5 flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl">
+            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">Not sure what package is best for you? </span>
+            <a href="/contact-us#contact-form" className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0">Contact us here and we're happy to help.</a>
+          </div>
+        </div>
+
         <section className="mb-12 sm:mb-16 lg:mb-24">
           <div className="text-center mb-6 sm:mb-8 lg:mb-12">
             <h2 className="text-xl sm:text-2xl lg:text-3xl font-bold mb-3 sm:mb-4 px-2">
@@ -245,17 +244,15 @@ export default function ServicesPage() {
               <CardContent className="p-4 sm:p-6">
                 <h3 className="text-base sm:text-lg lg:text-xl font-bold text-green-800 mb-3 sm:mb-4 flex items-center">
                   <CheckCircle className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 mr-2 flex-shrink-0" />
-                  ✅ Perfect For All Your Needs:
+                  ✅ Perfect For All Your Professional Needs:
                 </h3>
                 <ul className="space-y-1.5 sm:space-y-2 lg:space-y-3">
                   {[
                     "Employment verification and job applications",
-                    "Immigration documentation (USCIS requirements)",
-                    "University and college admissions (all levels)",
                     "Professional licensing and certification",
                     "Transfer credit evaluation",
                     "Workforce development programs",
-                    "Career and academic advancement",
+                    "Career advancement",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start">
                       <CheckCircle className="h-3 w-3 sm:h-4 sm:w-4 lg:h-5 lg:w-5 text-green-600 mr-1.5 sm:mr-2 flex-shrink-0 mt-0.5" />
@@ -280,8 +277,7 @@ export default function ServicesPage() {
                       Document-by-Document Evaluation
                     </h4>
                     <ul className="space-y-1 text-xs sm:text-sm text-blue-700">
-                      <li>• Best for employment and immigration</li>
-                      <li>• Community college admission</li>
+                      <li>• Best for employment and professional opportunities</li>
                       <li>• General credential verification</li>
                     </ul>
                   </div>
@@ -290,10 +286,9 @@ export default function ServicesPage() {
                       Course-by-Course Evaluation
                     </h4>
                     <ul className="space-y-1 text-xs sm:text-sm text-blue-700">
-                      <li>• University admissions (all levels)</li>
                       <li>• Professional licensing</li>
                       <li>• Transfer credit evaluation</li>
-                      <li>• Detailed academic analysis</li>
+                      <li>• Detailed credential analysis</li>
                     </ul>
                   </div>
                 </div>

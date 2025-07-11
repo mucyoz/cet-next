@@ -50,9 +50,7 @@ export default function HomePage() {
                 <span className="gradient-text">Recognized Everywhere</span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto px-4">
-                We help international professionals and students get their
-                degrees, diplomas, and certificates evaluated for use in the
-                United States.
+                We help internationally trained professionals get their degrees, diplomas, and certificates evaluated for career advancement in the United States.
               </p>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-blue-600 px-4">
                 Here&#39;s what makes us unique:{" "}
@@ -67,11 +65,7 @@ export default function HomePage() {
                       Complete Evaluation Services
                     </p>
                     <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
-                      We offer <strong>document-by-document evaluations</strong>{" "}
-                      for employment and community college admission, and{" "}
-                      <strong>course-by-course evaluations</strong> for
-                      university admissions and professional licensing. All
-                      evaluations include education transition support.
+                      We offer <strong>document-by-document evaluations</strong> for employment opportunities and <strong>course-by-course evaluations</strong> for professional licensing and career advancement.
                     </p>
                   </div>
                 </div>
@@ -92,16 +86,16 @@ export default function HomePage() {
                   >
                     <p>
                       <span className="font-semibold text-center leading-tight">
-                        Transform Your International Credentials
+                        Transform Your International Credentials Into U.S. Career Opportunities.
                       </span>
                       <span className="text-xs sm:text-sm opacity-90 mt-1 hidden sm:block text-center">
-                        Into American Success
+                        Professional credential evaluation + Career pathway roadmap in 5 business days or less
                       </span>
                     </p>
                   </Button>
                 </Link>
                 <p className="text-xs sm:text-sm text-gray-600 sm:hidden text-center px-2">
-                  Evaluation + Career pathway roadmap in 5 business days or less
+                  Professional credential evaluation + Career pathway roadmap in 5 business days or less
                 </p>
               </div>
             </motion.div>
@@ -192,7 +186,7 @@ export default function HomePage() {
                 {
                   title: "Credential Evaluation",
                   description:
-                    "Our certified evaluators carefully assess your academic documents to determine their U.S. equivalency for all purposes including employment, immigration, and university admissions.",
+                    "Our certified evaluators carefully assess your academic documents to determine their U.S. equivalency for employment, and professional licensing purposes.",
                   icon: (
                     <Shield className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600" />
                   ),
@@ -205,33 +199,33 @@ export default function HomePage() {
                   ],
                 },
                 {
-                  title: "Academic & Career Mapping",
+                  title: "Professional Career Mapping",
                   description:
-                    "We analyze your background against current market trends and academic requirements to identify opportunities in your field.",
+                    "We analyze your background against current market trends and professional requirements to identify career opportunities in your field.",
                   icon: (
                     <Globe className="h-8 w-8 sm:h-10 sm:w-10 text-indigo-600" />
                   ),
                   features: [
-                    "University admission guidance",
+                    "Professional opportunity guidance",
                     "Industry market analysis",
                     "Skills gap assessment",
-                    "Growth opportunity mapping",
-                    "Personalized roadmap",
+                    "Career growth mapping",
+                    "Personalized professional roadmap",
                   ],
                 },
                 {
                   title: "Success Guidance",
                   description:
-                    "Receive detailed guidance to successfully activate your academic or professional career in the U.S.",
+                    "Receive detailed guidance to successfully launch your professional career in the U.S.",
                   icon: (
-                    <Award className="h-8 w-8 sm:h-10 sm:w-10 text-blue-600" />
+                    <Award className="h-8 w-8 sm:h-10 sm:w-10 text-amber-600" />
                   ),
                   features: [
-                    "Academic transition planning",
-                    "Career transition planning",
+                    "Professional transition planning",
+                    "Career advancement planning",
                     "LinkedIn optimization",
                     "Interview preparation",
-                    "Networking strategies",
+                    "Professional networking strategies",
                   ],
                 },
               ].map((service, i) => (
@@ -287,8 +281,8 @@ export default function HomePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 lg:gap-8">
               <PricingCard
                 title="Essential Document Evaluation"
-                price={149}
-                description="Perfect for employment, immigration, and community college admission"
+                price={199}
+                description="Perfect for employment and professional opportunities"
                 color="blue"
                 features={[
                   { text: "Document-by-document evaluation" },
@@ -303,8 +297,8 @@ export default function HomePage() {
               />
               <PricingCard
                 title="Professional Plus (Course-By-Course)"
-                price={229}
-                description="Detailed academic analysis for university admissions and licensing"
+                price={249}
+                description="Detailed credential analysis for professional licensing and career advancement"
                 color="indigo"
                 features={[
                   { text: "Course-by-course evaluation" },
@@ -358,6 +352,13 @@ export default function HomePage() {
           </div>
         </section>
 
+        <div className="flex justify-center mb-8">
+          <div className="bg-blue-50 border border-blue-200 rounded-lg px-6 py-5 flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl">
+            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">Not sure what package is best for you? </span>
+            <a href="/contact-us#contact-form" className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0">Contact us here and we're happy to help.</a>
+          </div>
+        </div>
+
         <div id="testimonials" className="px-4">
           <Testimonials />
         </div>
@@ -369,13 +370,11 @@ export default function HomePage() {
                 <div className="grid md:grid-cols-2 gap-0">
                   <div className="bg-gradient-to-br from-blue-600 to-indigo-700 p-6 sm:p-8 md:p-12 text-white">
                     <h3 className="text-2xl sm:text-3xl md:text-4xl font-bold mb-4 sm:mb-6">
-                      Ready to Transform Your Future?
+                      Ready to Advance Your Professional Career?
                     </h3>
                     <div className="space-y-4 sm:space-y-6">
                       <p className="text-base sm:text-lg md:text-xl opacity-90">
-                        Join thousands of international professionals and
-                        students who have successfully achieved their goals in
-                        the United States.
+                        Join hundreds of internationally trained professionals who have successfully advanced their careers in the United States.
                       </p>
                       <ul className="space-y-3 sm:space-y-4">
                         {[

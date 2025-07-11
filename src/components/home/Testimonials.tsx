@@ -9,23 +9,23 @@ import { Quote } from "lucide-react";
 
 const testimonials = [
   {
-    text: "The Center for Education Transitions made my transition to studying in the US seamless. Their course-by-course evaluation was accepted by my university, and their academic guidance was invaluable.",
+    text: "The Center for Education Transitions made my professional transition to the US seamless. Their course-by-course evaluation was accepted for my professional licensing, and their career guidance was invaluable.",
     author: "Sophia Chen",
-    role: "Graduate Student",
+    role: "Healthcare Professional",
     country: "Taiwan",
     avatar: "SC",
   },
   {
-    text: "After struggling with credential recognition for months, I found CET. Within weeks, I had my evaluation and was able to apply for my nursing license and continue my education.",
+    text: "After struggling with credential recognition for months, I found CET. Within weeks, I had my evaluation and was able to apply for my nursing license and advance my career.",
     author: "Miguel Rodriguez",
-    role: "Nursing Student & Professional",
+    role: "Nursing Professional",
     country: "Mexico",
     avatar: "MR",
   },
   {
-    text: "The Executive package was perfect for my needs. The coaching sessions helped me understand both academic and business cultures in the U.S. and position myself effectively.",
+    text: "The Executive package was perfect for my needs. The coaching sessions helped me understand U.S. business culture and position myself effectively for career advancement.",
     author: "Anya Petrova",
-    role: "MBA Student & Marketing Director",
+    role: "Marketing Director",
     country: "Russia",
     avatar: "AP",
   },

@@ -56,9 +56,12 @@ export function Header() {
                 href={item.href}
                 className={cn(
                   "flex items-center font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap",
-                  pathname === item.href
-                    ? "text-blue-600"
-                    : "text-gray-600 hover:text-gray-900"
+
+                  item.href === "/contact-us"
+                    ? "font-extrabold text-blue-600"
+                    : pathname === item.href
+                      ? "text-blue-600"
+                      : "text-gray-600 hover:text-gray-900"
                 )}
               >
                 {item.label}

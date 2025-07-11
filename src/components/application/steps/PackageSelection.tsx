@@ -26,10 +26,10 @@ const packages = [
   {
     id: "essential-document",
     name: "Essential Document Evaluation",
-    price: 149,
+    price: 199,
     color: "blue",
     description:
-      "Perfect for employment, immigration, and community college admission.",
+      "Perfect for employment and professional opportunities.",
     processingTime: "7-10 business days",
     features: [
       "Document-by-document evaluation",
@@ -45,10 +45,10 @@ const packages = [
   {
     id: "professional-plus",
     name: "Professional Plus (Course-By-Course)",
-    price: 229,
+    price: 249,
     color: "indigo",
     description:
-      "Detailed academic analysis for university admissions and licensing.",
+      "Detailed credential analysis for professional licensing and career advancement.",
     processingTime: "5-7 business days",
     features: [
       "Course-by-course evaluation",
