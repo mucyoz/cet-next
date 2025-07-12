@@ -7,8 +7,31 @@ import "./globals.css"; // Your global stylesheet
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Center for Education Transitions",
-  description: "Credential evaluation and education transition support.",
+  title:
+    "Center for Education Transitions - Professional Credential Evaluation",
+  description:
+    "Professional credential evaluation and education transition support for internationally trained professionals. Get your credentials evaluated for career advancement in the United States.",
+  keywords:
+    "professional credential evaluation, internationally trained professionals, credential evaluation services, career advancement, education transition, US credential evaluation, professional licensing, international credentials",
+  openGraph: {
+    title:
+      "Center for Education Transitions - Professional Credential Evaluation",
+    description:
+      "Professional credential evaluation and education transition support for internationally trained professionals. Get your credentials evaluated for career advancement in the United States.",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title:
+      "Center for Education Transitions - Professional Credential Evaluation",
+    description:
+      "Professional credential evaluation and education transition support for internationally trained professionals.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
