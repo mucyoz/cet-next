@@ -50,14 +50,16 @@ export default function HomePage() {
                 <span className="gradient-text">Recognized Everywhere</span>
               </h1>
               <p className="text-base sm:text-lg md:text-xl lg:text-2xl text-gray-600 max-w-4xl mx-auto px-4">
-                We help internationally trained professionals get their degrees, diplomas, and certificates evaluated for career advancement in the United States.
+                We help internationally trained professionals get their degrees,
+                diplomas, and certificates evaluated for career advancement in
+                the United States.
               </p>
               <p className="text-sm sm:text-base md:text-lg lg:text-xl font-medium text-blue-600 px-4">
                 Here&#39;s what makes us unique:{" "}
                 <strong>We don&#39;t just evaluate—we elevate.</strong>
               </p>
 
-              <div className="max-w-4xl mx-auto mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg mx-4">
+              <div className="max-w-4xl  mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg mx-4">
                 <div className="flex items-start">
                   <FileCheck className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" />
                   <div className="text-left min-w-0">
@@ -65,7 +67,10 @@ export default function HomePage() {
                       Complete Evaluation Services
                     </p>
                     <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
-                      We offer <strong>document-by-document evaluations</strong> for employment opportunities and <strong>course-by-course evaluations</strong> for professional licensing and career advancement.
+                      We offer <strong>document-by-document evaluations</strong>{" "}
+                      for employment opportunities and{" "}
+                      <strong>course-by-course evaluations</strong> for
+                      professional licensing and career advancement.
                     </p>
                   </div>
                 </div>
@@ -86,16 +91,19 @@ export default function HomePage() {
                   >
                     <p>
                       <span className="font-semibold text-center leading-tight">
-                        Transform Your International Credentials Into U.S. Career Opportunities.
+                        Transform Your International Credentials Into U.S.
+                        Career Opportunities.
                       </span>
                       <span className="text-xs sm:text-sm opacity-90 mt-1 hidden sm:block text-center">
-                        Professional credential evaluation + Career pathway roadmap in 5 business days or less
+                        Professional credential evaluation + Career pathway
+                        roadmap in 5 business days or less
                       </span>
                     </p>
                   </Button>
                 </Link>
                 <p className="text-xs sm:text-sm text-gray-600 sm:hidden text-center px-2">
-                  Professional credential evaluation + Career pathway roadmap in 5 business days or less
+                  Professional credential evaluation + Career pathway roadmap in
+                  5 business days or less
                 </p>
               </div>
             </motion.div>
@@ -354,8 +362,15 @@ export default function HomePage() {
 
         <div className="flex justify-center mb-8">
           <div className="bg-blue-50 border border-blue-200 rounded-lg px-6 py-5 flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl">
-            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">Not sure what package is best for you? </span>
-            <a href="/contact-us#contact-form" className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0">Contact us here and we're happy to help.</a>
+            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">
+              Not sure what package is best for you?{" "}
+            </span>
+            <a
+              href="/contact-us#contact-form"
+              className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0"
+            >
+              Contact us here and we&apos;re happy to help.
+            </a>
           </div>
         </div>
 
@@ -374,7 +389,9 @@ export default function HomePage() {
                     </h3>
                     <div className="space-y-4 sm:space-y-6">
                       <p className="text-base sm:text-lg md:text-xl opacity-90">
-                        Join hundreds of internationally trained professionals who have successfully advanced their careers in the United States.
+                        Join hundreds of internationally trained professionals
+                        who have successfully advanced their careers in the
+                        United States.
                       </p>
                       <ul className="space-y-3 sm:space-y-4">
                         {[

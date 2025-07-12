@@ -42,11 +42,14 @@ export default function ServicesPage() {
               Professional Credential Evaluation & Career Advancement
             </h1>
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto px-4">
-              The thorough credential evaluation service that combines your internationally earned credentials with an actionable U.S. career advancement strategy. Get your evaluation PLUS a career pathway roadmap in 5 business days or less.
+              The thorough credential evaluation service that combines your
+              internationally earned credentials with an actionable U.S. career
+              advancement strategy. Get your evaluation PLUS a career pathway
+              roadmap in 5 business days or less.
             </p>
 
             {/* Service Options Notice */}
-            <div className="max-w-4xl mx-auto mt-4 sm:mt-6 lg:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg mx-4">
+            <div className="max-w-4xl mx-auto mt-4 sm:mt-6 lg:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <div className="flex items-start">
                 <FileCheck className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" />
                 <div className="text-left min-w-0">
@@ -54,7 +57,11 @@ export default function ServicesPage() {
                     Complete Evaluation Services
                   </p>
                   <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
-                    We offer <strong>document-by-document evaluations</strong> for employment opportunities and <strong>course-by-course evaluations</strong> for professional licensing and career advancement. All evaluations include detailed career transition support.
+                    We offer <strong>document-by-document evaluations</strong>{" "}
+                    for employment opportunities and{" "}
+                    <strong>course-by-course evaluations</strong> for
+                    professional licensing and career advancement. All
+                    evaluations include detailed career transition support.
                   </p>
                 </div>
               </div>
@@ -221,8 +228,15 @@ export default function ServicesPage() {
 
         <div className="flex justify-center mb-8">
           <div className="bg-blue-50 border border-blue-200 rounded-lg px-6 py-5 flex flex-col sm:flex-row items-center gap-3 w-full max-w-2xl">
-            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">Not sure what package is best for you? </span>
-            <a href="/contact-us#contact-form" className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0">Contact us here and we're happy to help.</a>
+            <span className="text-blue-900 font-medium text-base sm:text-lg text-center">
+              Not sure what package is best for you?{" "}
+            </span>
+            <a
+              href="/contact-us#contact-form"
+              className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0"
+            >
+              Contact us here and we&apos;re happy to help.
+            </a>
           </div>
         </div>
 
@@ -276,7 +290,9 @@ export default function ServicesPage() {
                       Document-by-Document Evaluation
                     </h4>
                     <ul className="space-y-1 text-xs sm:text-sm text-blue-700">
-                      <li>• Best for employment and professional opportunities</li>
+                      <li>
+                        • Best for employment and professional opportunities
+                      </li>
                       <li>• General credential verification</li>
                     </ul>
                   </div>

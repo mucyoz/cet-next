@@ -58,7 +58,7 @@ export function PersonalInfoForm({
       updateFormData(value as z.infer<typeof personalInfoSchema>);
     });
     return () => subscription.unsubscribe();
-  }, [form.watch, updateFormData]);
+  }, [form, form.watch, updateFormData]);
 
   return (
     <div className="space-y-6">
