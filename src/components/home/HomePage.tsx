@@ -76,32 +76,30 @@ export default function HomePage() {
                 </div>
               </div>
 
-              <div className="mt-6 sm:mt-8 flex flex-col items-center justify-center space-y-3 sm:space-y-4 px-4 ">
+              <div className="mt-4 sm:mt-6 md:mt-8 flex flex-col items-center justify-center space-y-2 sm:space-y-3 md:space-y-4 px-2 sm:px-4 md:px-6">
                 <Link href="/application" passHref>
-                  <Button
-                    asChild
+                  <div
                     className={cn(
-                      "flex-1 text-sm sm:text-base md:text-lg px-2 sm:px-4 md:px-6 py-1 sm:py-3 md:py-5 rounded-lg sm:rounded-xl md:rounded-2xl",
-                      "gradient-bg hover:opacity-90 hover-lift",
+                      "text-xs sm:text-sm md:text-base lg:text-lg px-4 sm:px-6 md:px-6 py-4 sm:py-6 md:py-6",
+                      "rounded-lg sm:rounded-xl md:rounded-2xl lg:rounded-3xl",
+                      "gradient-bg hover:opacity-90 hover-lift cursor-pointer",
                       "transition-all duration-300 shadow-lg",
-                      "min-h-[48px] sm:min-h-[56px] md:min-h-[72px]",
-                      "flex flex-col items-center justify-center",
-                      "w-full max-w-sm sm:max-w-2xl md:w-auto"
+                      "flex flex-col items-center justify-center gap-2 sm:gap-3",
+                      "w-full max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl",
+                      "text-center"
                     )}
                   >
-                    <p>
-                      <span className="font-semibold text-center leading-tight">
-                        Transform Your International Credentials Into U.S.
-                        Career Opportunities.
-                      </span>
-                      <span className="text-xs sm:text-sm opacity-90 mt-1 hidden sm:block text-center">
-                        Professional credential evaluation + Career pathway
-                        roadmap in 5 business days or less
-                      </span>
-                    </p>
-                  </Button>
+                    <span className="font-semibold leading-tight block text-white">
+                      Transform Your International Credentials Into U.S.
+                      Career Opportunities.
+                    </span>
+                    <span className="text-base opacity-90 hidden sm:block leading-relaxed text-gray-200">
+                      Professional credential evaluation + Career pathway
+                      roadmap in 5 business days or less
+                    </span>
+                  </div>
                 </Link>
-                <p className="text-xs sm:text-sm text-gray-600 sm:hidden text-center px-2">
+                <p className="text-xs sm:text-base text-gray-600 sm:hidden text-center px-2 leading-relaxed">
                   Professional credential evaluation + Career pathway roadmap in
                   5 business days or less
                 </p>
