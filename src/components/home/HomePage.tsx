@@ -76,12 +76,12 @@ export default function HomePage() {
                   <Button
                     asChild
                     className={cn(
-                      "flex-1 text-white text-sm sm:text-base md:text-lg px-2 sm:px-4 md:px-6 py-1 sm:py-3 md:py-5 rounded-lg sm:rounded-xl md:rounded-2xl",
+                      "flex-1 text-sm sm:text-base md:text-lg px-2 sm:px-4 md:px-6 py-1 sm:py-3 md:py-5 rounded-lg sm:rounded-xl md:rounded-2xl",
                       "gradient-bg hover:opacity-90 hover-lift",
                       "transition-all duration-300 shadow-lg",
                       "min-h-[48px] sm:min-h-[56px] md:min-h-[72px]",
                       "flex flex-col items-center justify-center",
-                      "w-full max-w-sm sm:max-w-md md:w-auto"
+                      "w-full max-w-sm sm:max-w-2xl md:w-auto"
                     )}
                   >
                     <p>

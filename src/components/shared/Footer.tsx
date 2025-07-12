@@ -41,7 +41,7 @@ export function Footer() {
             </div>
             <p className="text-gray-400">
               Complete credential evaluation services combined with education
-              transition support for international professionals and students
+              transition support for internationally trained professionals
               seeking opportunities in the United States.
             </p>
           </div>

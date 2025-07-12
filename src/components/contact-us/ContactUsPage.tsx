@@ -3,13 +3,7 @@
 import React from "react";
 import { Footer } from "../shared/Footer";
 import { Card, CardContent } from "../ui/card";
-import {
-  CheckCircle2,
-  Mail,
-  MessageCircle,
-  // PhoneCall,
-  Shield,
-} from "lucide-react";
+import { CheckCircle2, Shield } from "lucide-react";
 import { motion } from "framer-motion";
 import { Header } from "../shared/Header";
 import ContactForm from "./ContactForm";

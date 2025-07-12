@@ -5,7 +5,14 @@ import * as z from "zod";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { Textarea } from "../ui/textarea";
-import { Form, FormField, FormItem, FormLabel, FormControl, FormMessage } from "../ui/form";
+import {
+  Form,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormControl,
+  FormMessage,
+} from "../ui/form";
 import { motion } from "framer-motion";
 
 const contactSchema = z.object({
@@ -21,21 +28,17 @@ const ContactForm: React.FC = () => {
     resolver: zodResolver(contactSchema),
     defaultValues: { name: "", email: "", message: "" },
   });
-  const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
+  const [status, setStatus] = useState<
+    "idle" | "loading" | "success" | "error"
+  >("idle");
   const [errorMsg, setErrorMsg] = useState("");
 
   const onSubmit = async (data: ContactFormData) => {
     setStatus("loading");
     setErrorMsg("");
     try {
-      const res = await fetch("/api/contact", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) throw new Error("Failed to send message");
-      setStatus("success");
-      form.reset();
+      // Your Backend Logic here...
+      console.log("Form Data Submitted:", data);
     } catch (err: any) {
       setStatus("error");
       setErrorMsg(err.message || "Something went wrong");
@@ -58,7 +61,11 @@ const ContactForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Name</FormLabel>
                 <FormControl>
-                  <Input placeholder="Your Name" {...field} className="bg-white/80 focus:bg-white" />
+                  <Input
+                    placeholder="Your Name"
+                    {...field}
+                    className="bg-white/80 focus:bg-white"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -71,7 +78,12 @@ const ContactForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Email</FormLabel>
                 <FormControl>
-                  <Input type="email" placeholder="you@email.com" {...field} className="bg-white/80 focus:bg-white" />
+                  <Input
+                    type="email"
+                    placeholder="you@email.com"
+                    {...field}
+                    className="bg-white/80 focus:bg-white"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -84,7 +96,12 @@ const ContactForm: React.FC = () => {
               <FormItem>
                 <FormLabel>Message</FormLabel>
                 <FormControl>
-                  <Textarea rows={5} placeholder="How can we help you?" {...field} className="bg-white/80 focus:bg-white resize-none" />
+                  <Textarea
+                    rows={5}
+                    placeholder="How can we help you?"
+                    {...field}
+                    className="bg-white/80 focus:bg-white resize-none"
+                  />
                 </FormControl>
                 <FormMessage />
               </FormItem>
@@ -123,4 +140,4 @@ const ContactForm: React.FC = () => {
   );
 };
 
-export default ContactForm; 
+export default ContactForm;

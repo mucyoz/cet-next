@@ -46,7 +46,7 @@ export default function EmployersPage() {
             <p className="text-sm sm:text-base md:text-lg lg:text-xl text-gray-600 max-w-4xl mx-auto px-4">
               Trusted credential evaluation services for HR professionals,
               staffing agencies, universities, and organizations hiring or
-              admitting internationally trained professionals and students. Our
+              admitting internationally trained professionals. Our
               evaluations meet industry standards and provide the reliability
               you need for confident decisions.
             </p>

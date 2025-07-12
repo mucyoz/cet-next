@@ -56,8 +56,7 @@ export default function HowItWorksPage() {
                   </p>
                   <p className="text-xs sm:text-sm text-blue-700 leading-relaxed">
                     Our service combines credential evaluation with education
-                    transition support for employment, immigration, university
-                    admissions, professional licensing, and all credential
+                    transition support for employment and professional licensing, and all credential
                     evaluation needs.
                   </p>
                 </div>

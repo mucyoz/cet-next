@@ -250,7 +250,6 @@ export default function ServicesPage() {
                   {[
                     "Employment verification and job applications",
                     "Professional licensing and certification",
-                    "Transfer credit evaluation",
                     "Workforce development programs",
                     "Career advancement",
                   ].map((item, i) => (
@@ -286,6 +285,7 @@ export default function ServicesPage() {
                       Course-by-Course Evaluation
                     </h4>
                     <ul className="space-y-1 text-xs sm:text-sm text-blue-700">
+                      <li>• University admissions (all levels)</li>
                       <li>• Professional licensing</li>
                       <li>• Transfer credit evaluation</li>
                       <li>• Detailed credential analysis</li>
