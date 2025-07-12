@@ -31,17 +31,39 @@ const ContactForm: React.FC = () => {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
-  const [errorMsg, setErrorMsg] = useState("");
+  const [statusMessage, setStatusMessage] = useState("");
 
   const onSubmit = async (data: ContactFormData) => {
     setStatus("loading");
-    setErrorMsg("");
+    setStatusMessage("");
+
     try {
-      // Your Backend Logic here...
-      console.log("Form Data Submitted:", data);
+      const response = await fetch("/api/contact-us", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      const result = await response.json();
+
+      if (!response.ok) {
+        // If the server response is not OK, throw an error with the server's message
+        throw new Error(
+          result.message || "Something went wrong on the server."
+        );
+      }
+
+      // If successful:
+      setStatus("success");
+      setStatusMessage(result.message);
+      form.reset(); // Reset the form fields on success
     } catch (err: any) {
       setStatus("error");
-      setErrorMsg(err.message || "Something went wrong");
+      setStatusMessage(
+        err.message || "Something went wrong. Please try again."
+      );
     }
   };
 
@@ -121,7 +143,7 @@ const ContactForm: React.FC = () => {
                 animate={{ opacity: 1 }}
                 className="text-green-600 text-center mt-4 font-medium"
               >
-                Thank you! Your message has been sent.
+                {statusMessage}
               </motion.p>
             )}
             {status === "error" && (
@@ -130,7 +152,7 @@ const ContactForm: React.FC = () => {
                 animate={{ opacity: 1 }}
                 className="text-red-600 text-center mt-4 font-medium"
               >
-                {errorMsg}
+                {statusMessage}
               </motion.p>
             )}
           </div>
