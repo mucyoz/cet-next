@@ -16,7 +16,7 @@ import {
   Clock,
   FileCheck,
   DollarSign,
-  GraduationCap,
+  // GraduationCap,
   Globe,
   Shield,
   Briefcase,
@@ -107,30 +107,30 @@ const faqCategories: FAQCategory[] = [
       },
     ],
   },
-  {
-    icon: (
-      <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-600" />
-    ),
-    title: "Academic & University Use",
-    questions: [
-      {
-        q: "Can I use this evaluation for university admissions?",
-        a: "Yes! Our course-by-course evaluations are specifically designed for university admissions at all levels. We provide detailed course analysis that universities require for admission decisions.",
-      },
-      {
-        q: "Will universities accept your evaluations?",
-        a: "Yes, our evaluations are widely accepted by universities across the United States. We follow standard evaluation practices and provide the detailed analysis that admissions offices require.",
-      },
-      {
-        q: "Can I get transfer credit with your evaluation?",
-        a: "Our course-by-course evaluations are designed to help universities award transfer credit for previously completed coursework. The detailed course analysis helps institutions make informed transfer credit decisions.",
-      },
-      {
-        q: "Do you evaluate credentials for graduate school?",
-        a: "Yes, we evaluate credentials for all academic levels including graduate and professional programs. Our course-by-course evaluations provide the detailed analysis required for graduate admissions.",
-      },
-    ],
-  },
+  // {
+  //   icon: (
+  //     <GraduationCap className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-purple-600" />
+  //   ),
+  //   title: "Academic & University Use",
+  //   questions: [
+  //     {
+  //       q: "Can I use this evaluation for university admissions?",
+  //       a: "Yes! Our course-by-course evaluations are specifically designed for university admissions at all levels. We provide detailed course analysis that universities require for admission decisions.",
+  //     },
+  //     {
+  //       q: "Will universities accept your evaluations?",
+  //       a: "Yes, our evaluations are widely accepted by universities across the United States. We follow standard evaluation practices and provide the detailed analysis that admissions offices require.",
+  //     },
+  //     {
+  //       q: "Can I get transfer credit with your evaluation?",
+  //       a: "Our course-by-course evaluations are designed to help universities award transfer credit for previously completed coursework. The detailed course analysis helps institutions make informed transfer credit decisions.",
+  //     },
+  //     {
+  //       q: "Do you evaluate credentials for graduate school?",
+  //       a: "Yes, we evaluate credentials for all academic levels including graduate and professional programs. Our course-by-course evaluations provide the detailed analysis required for graduate admissions.",
+  //     },
+  //   ],
+  // },
   {
     icon: (
       <Briefcase className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-amber-600" />
@@ -183,16 +183,16 @@ const faqCategories: FAQCategory[] = [
     icon: (
       <Shield className="h-4 w-4 sm:h-5 sm:w-5 lg:h-6 lg:w-6 text-green-600" />
     ),
-    title: "Immigration & Licensing",
+    title: "Licensing",
     questions: [
-      {
-        q: "Is this evaluation accepted for immigration purposes?",
-        a: "Yes, our evaluations meet USCIS requirements for immigration documentation. The format and content comply with federal immigration standards.",
-      },
-      {
-        q: "Can employers use this for I-9 verification?",
-        a: "Our evaluations provide valuable information for employers but are not a substitute for required I-9 documentation. They serve as supplementary verification of educational qualifications.",
-      },
+      // {
+      //   q: "Is this evaluation accepted for immigration purposes?",
+      //   a: "Yes, our evaluations meet USCIS requirements for immigration documentation. The format and content comply with federal immigration standards.",
+      // },
+      // {
+      //   q: "Can employers use this for I-9 verification?",
+      //   a: "Our evaluations provide valuable information for employers but are not a substitute for required I-9 documentation. They serve as supplementary verification of educational qualifications.",
+      // },
       {
         q: "Will this help with professional licensing?",
         a: "Yes, our course-by-course evaluations are accepted by many licensing boards, and we provide guidance on licensing requirements as part of our education transition support.",

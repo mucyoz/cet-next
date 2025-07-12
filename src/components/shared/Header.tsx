@@ -55,13 +55,13 @@ export function Header() {
                 key={item.href}
                 href={item.href}
                 className={cn(
-                  "flex items-center font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap"
+                  "flex items-center font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap",
 
-                  // item.href === "/contact-us"
-                  //   ? "font-extrabold text-blue-600"
-                  //   : pathname === item.href
-                  //     ? "text-blue-600"
-                  //     : "text-gray-600 hover:text-gray-900"
+                  item.href === "/contact-us"
+                    ? "font-bold text-white bg-blue-600 px-4 py-2 rounded-md"
+                    : pathname === item.href
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-gray-900"
                 )}
               >
                 {item.label}
@@ -121,7 +121,10 @@ export function Header() {
                       "text-left font-medium py-3 px-4 rounded-lg transition-colors duration-200 min-h-[48px]",
                       pathname === item.href
                         ? "text-blue-600 bg-blue-50 font-semibold"
-                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50"
+                        : "text-gray-600 hover:text-gray-900 hover:bg-gray-50",
+                      item.href === "/contact-us"
+                        ? "font-bold text-white bg-blue-600 px-4  rounded-md w-fit"
+                        : ""
                     )}
                   >
                     {item.label}
