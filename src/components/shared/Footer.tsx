@@ -21,9 +21,9 @@ export function Footer() {
     ],
     Support: [
       { label: "Contact Us", href: "/contact-us" },
-      { label: "Track Application", href: "/" },
-      { label: "Privacy Policy", href: "/" },
-      { label: "Terms of Service", href: "/" },
+      { label: "Track Application", href: "" },
+      { label: "Privacy Policy", href: "" },
+      { label: "Terms of Service", href: "" },
     ],
   };
 
@@ -53,13 +53,21 @@ export function Footer() {
               <ul className="space-y-3">
                 {links.map((link, i) => (
                   <li key={i}>
-                    {/* Use the Link component for navigation */}
-                    <Link
-                      href={link.href}
-                      className="text-gray-400 hover:text-white transition-colors duration-200 hover-lift inline-block"
-                    >
-                      {link.label}
-                    </Link>
+                    {/* if the href is empty, dont make it a link */}
+                    {link.href ? (
+                      <Link
+                        href={link.href}
+                        className="text-gray-400 hover:text-white transition-colors duration-200 hover-lift inline-block"
+                      >
+                        {link.label}
+                      </Link>
+                    ) : (
+                      <span className="text-gray-400 ">
+                        {link.label}
+                        <br />
+                        <br />
+                      </span>
+                    )}
                   </li>
                 ))}
               </ul>
