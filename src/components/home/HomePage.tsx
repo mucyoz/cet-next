@@ -59,7 +59,7 @@ export default function HomePage() {
                 <strong>We don&#39;t just evaluate—we elevate.</strong>
               </p>
 
-              <div className="max-w-4xl  mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg mx-4">
+              <div className="max-w-4xl mx-auto  mt-6 sm:mt-8 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
                 <div className="flex items-start">
                   <FileCheck className="h-4 w-4 sm:h-5 sm:w-5 text-blue-500 mr-2 sm:mr-3 flex-shrink-0 mt-0.5" />
                   <div className="text-left min-w-0">
@@ -90,8 +90,8 @@ export default function HomePage() {
                     )}
                   >
                     <span className="font-semibold leading-tight block text-white">
-                      Transform Your International Credentials Into U.S.
-                      Career Opportunities.
+                      Transform Your International Credentials Into U.S. Career
+                      Opportunities.
                     </span>
                     <span className="text-base opacity-90 hidden sm:block leading-relaxed text-gray-200">
                       Professional credential evaluation + Career pathway
