@@ -1,39 +1,52 @@
-import React, { useState } from "react";
-import { useForm } from "react-hook-form";
+"use client";
+
+import { useState } from "react";
+import { motion } from "framer-motion";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "../ui/button";
-import { Input } from "../ui/input";
-import { Textarea } from "../ui/textarea";
+
+import { cn } from "@/lib/utils";
+import { Button } from "@/components/ui/button";
 import {
   Form,
+  FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormControl,
   FormMessage,
-} from "../ui/form";
-import { motion } from "framer-motion";
+} from "@/components/ui/form";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+
+interface ContactFormProps {
+  className?: string;
+}
 
 const contactSchema = z.object({
   name: z.string().min(2, "Name is required"),
   email: z.string().email("Enter a valid email"),
-  message: z.string().min(10, "Message must be at least 10 characters"),
+  message: z.string().min(2, "How can we help you?"),
 });
 
-type ContactFormData = z.infer<typeof contactSchema>;
+type ContactFormValues = z.infer<typeof contactSchema>;
 
-const ContactForm: React.FC = () => {
-  const form = useForm<ContactFormData>({
-    resolver: zodResolver(contactSchema),
-    defaultValues: { name: "", email: "", message: "" },
-  });
+export function ContactForm({ className }: ContactFormProps) {
   const [status, setStatus] = useState<
     "idle" | "loading" | "success" | "error"
   >("idle");
   const [statusMessage, setStatusMessage] = useState("");
 
-  const onSubmit = async (data: ContactFormData) => {
+  const form = useForm<ContactFormValues>({
+    resolver: zodResolver(contactSchema),
+    defaultValues: {
+      name: "",
+      email: "",
+      message: "",
+    },
+  });
+
+  async function onSubmit(values: ContactFormValues) {
     setStatus("loading");
     setStatusMessage("");
 
@@ -43,99 +56,112 @@ const ContactForm: React.FC = () => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify(data),
+        body: JSON.stringify(values),
       });
 
-      const result = await response.json();
-
-      if (!response.ok) {
-        // If the server response is not OK, throw an error with the server's message
-        throw new Error(
-          result.message || "Something went wrong on the server."
+      if (response.ok) {
+        setStatus("success");
+        setStatusMessage("Thank you! We'll be in touch soon.");
+        form.reset();
+      } else {
+        setStatus("error");
+        const errorData = await response.json();
+        setStatusMessage(
+          errorData.message || "Something went wrong. Please try again."
         );
       }
-
-      // If successful:
-      setStatus("success");
-      setStatusMessage(result.message);
-      form.reset(); // Reset the form fields on success
-    } catch (err: any) {
+    } catch (error: any) {
       setStatus("error");
       setStatusMessage(
-        err.message || "Something went wrong. Please try again."
+        error.message || "Something went wrong. Please try again."
       );
+    } finally {
+      setTimeout(() => {
+        setStatus("idle");
+        setStatusMessage("");
+      }, 5000);
     }
-  };
+  }
 
   return (
     <motion.div
+      className={cn("max-w-xl mx-auto", className)}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.5 }}
-      className="w-full max-w-xl mx-auto"
     >
       <Form {...form}>
         <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-          <FormField
-            control={form.control}
-            name="name"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Name</FormLabel>
-                <FormControl>
-                  <Input
-                    placeholder="Your Name"
-                    {...field}
-                    className="bg-white/80 focus:bg-white"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-          <FormField
-            control={form.control}
-            name="email"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Email</FormLabel>
-                <FormControl>
-                  <Input
-                    type="email"
-                    placeholder="you@email.com"
-                    {...field}
-                    className="bg-white/80 focus:bg-white"
-                  />
-                </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
+          <div className="grid md:grid-cols-2 gap-6">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Name*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="Full Name"
+                      {...field}
+                      className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel className="text-gray-700 font-medium">
+                    Email*
+                  </FormLabel>
+                  <FormControl>
+                    <Input
+                      type="email"
+                      placeholder="your@email.com"
+                      {...field}
+                      className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base"
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+          </div>
+
           <FormField
             control={form.control}
             name="message"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Message</FormLabel>
+                <FormLabel className="text-gray-700 font-medium">
+                  Message*
+                </FormLabel>
                 <FormControl>
                   <Textarea
-                    rows={5}
-                    placeholder="How can we help you?"
+                    rows={6}
+                    placeholder="Write your response..."
                     {...field}
-                    className="bg-white/80 focus:bg-white resize-none"
+                    className="bg-white border-gray-300 focus:border-blue-500 focus:ring-blue-500 py-3 px-4 text-base resize-none"
                   />
                 </FormControl>
                 <FormMessage />
               </FormItem>
             )}
           />
+
           <div>
             <Button
               type="submit"
-              className="gradient-bg w-full py-3 text-lg font-semibold rounded-lg shadow-md hover:opacity-90 transition-all duration-200"
+              className="w-full gradient-bg text-white py-4 text-lg font-semibold rounded-lg transition-all duration-200"
               disabled={status === "loading"}
             >
-              {status === "loading" ? "Sending..." : "Send Message"}
+              {status === "loading" ? "Sending..." : "NEXT"}
             </Button>
             {status === "success" && (
               <motion.p
@@ -160,6 +186,4 @@ const ContactForm: React.FC = () => {
       </Form>
     </motion.div>
   );
-};
-
-export default ContactForm;
+}
