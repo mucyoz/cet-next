@@ -364,7 +364,7 @@ export default function HomePage() {
               Not sure what package is best for you?{" "}
             </span>
             <a
-              href="/contact-us#contact-form"
+              href="/contact-us"
               className="gradient-bg text-white font-semibold px-5 py-2 rounded-lg shadow hover:opacity-90 transition-all text-center sm:ml-4 mt-2 sm:mt-0"
             >
               Contact us here and we&apos;re happy to help.
