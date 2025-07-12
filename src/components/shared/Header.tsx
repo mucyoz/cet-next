@@ -58,10 +58,10 @@ export function Header() {
                   "flex items-center font-medium hover-lift transition-colors duration-200 text-sm lg:text-base whitespace-nowrap",
 
                   item.href === "/contact-us"
-                    ? "font-extrabold text-blue-600"
+                    ? "font-bold text-white bg-blue-600 px-4 py-2 rounded-md"
                     : pathname === item.href
-                      ? "text-blue-600"
-                      : "text-gray-600 hover:text-gray-900"
+                    ? "text-blue-600"
+                    : "text-gray-600 hover:text-gray-900"
                 )}
               >
                 {item.label}
