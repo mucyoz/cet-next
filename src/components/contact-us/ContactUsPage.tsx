@@ -8,12 +8,6 @@ import { motion } from "framer-motion";
 import { useRouter } from "next/navigation";
 
 const ContactUsPage = () => {
-  const router = useRouter();
-  const handleStartApplication = () => {
-    // Use router.push for programmatic navigation
-    router.push("/application");
-  };
-
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <Header />
@@ -76,14 +70,6 @@ const ContactUsPage = () => {
                   <span>Quick response and support</span>
                 </div>
               </div>
-
-              <Button
-                variant="outline"
-                className="self-start bg-transparent border-2 border-white text-white hover:bg-white hover:text-blue-600 px-8 py-3 text-lg font-semibold"
-                onClick={handleStartApplication}
-              >
-                SCHEDULE A CONSULTATION
-              </Button>
             </div>
 
             {/* Right Side - Form */}
