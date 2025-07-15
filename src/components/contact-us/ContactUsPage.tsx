@@ -1,11 +1,9 @@
 "use client";
-import { Button } from "@/components/ui/button";
 import { CheckCircle2 } from "lucide-react";
 import { Header } from "../shared/Header";
 import { ContactForm } from "./ContactForm";
 import { Footer } from "../shared/Footer";
 import { motion } from "framer-motion";
-import { useRouter } from "next/navigation";
 
 const ContactUsPage = () => {
   return (
