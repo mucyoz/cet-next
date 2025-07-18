@@ -19,13 +19,13 @@
 // import { motion } from "framer-motion";
 // import { PricingCard } from "./PricingCard";
 // import { Testimonials } from "./Testimonials";
-import { useRouter } from "next/navigation";
+// import { useRouter } from "next/navigation";
 import { Header } from "../shared/Header";
 // import { Footer } from "../shared/Footer";
 
 // The component is now self-contained and doesn't need props for navigation.
 export default function HomePage() {
-  const router = useRouter();
+  // const router = useRouter();
 
   // const handleStartApplication = () => {
   //   // Use router.push for programmatic navigation
