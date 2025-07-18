@@ -27,10 +27,10 @@ import { Header } from "../shared/Header";
 export default function HomePage() {
   const router = useRouter();
 
-  const handleStartApplication = () => {
-    // Use router.push for programmatic navigation
-    router.push("/application");
-  };
+  // const handleStartApplication = () => {
+  //   // Use router.push for programmatic navigation
+  //   router.push("/application");
+  // };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
