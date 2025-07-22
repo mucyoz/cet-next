@@ -14,9 +14,6 @@ const stripePromise = loadStripe(
 export default function ApplicationPage() {
   const router = useRouter();
 
-  if (0 === 0) {
-    return null;
-  }
   // This function tells the form how to go "back" to the homepage
   const handleReturnHome = () => {
     router.push("/");
