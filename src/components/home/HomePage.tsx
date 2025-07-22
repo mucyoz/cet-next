@@ -1,42 +1,42 @@
 "use client";
 
-// import Link from "next/link";
-// import { Card, CardContent } from "@/components/ui/card";
-// import { Button } from "@/components/ui/button";
-// import {
-//   CheckCircle,
-//   Globe,
-//   Shield,
-//   Award,
-//   Clock,
-//   Target,
-//   Briefcase,
-//   DollarSign,
-//   HeartHandshake,
-//   FileCheck,
-// } from "lucide-react";
-// import { cn } from "@/lib/utils";
-// import { motion } from "framer-motion";
-// import { PricingCard } from "./PricingCard";
-// import { Testimonials } from "./Testimonials";
-// import { useRouter } from "next/navigation";
+import Link from "next/link";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  CheckCircle,
+  Globe,
+  Shield,
+  Award,
+  Clock,
+  Target,
+  Briefcase,
+  DollarSign,
+  HeartHandshake,
+  FileCheck,
+} from "lucide-react";
+import { cn } from "@/lib/utils";
+import { motion } from "framer-motion";
+import { PricingCard } from "./PricingCard";
+import { Testimonials } from "./Testimonials";
+import { useRouter } from "next/navigation";
 import { Header } from "../shared/Header";
-// import { Footer } from "../shared/Footer";
+import { Footer } from "../shared/Footer";
 
 // The component is now self-contained and doesn't need props for navigation.
 export default function HomePage() {
-  // const router = useRouter();
+  const router = useRouter();
 
-  // const handleStartApplication = () => {
-  //   // Use router.push for programmatic navigation
-  //   router.push("/application");
-  // };
+  const handleStartApplication = () => {
+    // Use router.push for programmatic navigation
+    router.push("/application");
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-b from-white to-gray-50">
       <Header />
 
-      {/* <main>
+      <main>
         <section className="pt-8 sm:pt-16 md:pt-24 pb-12 sm:pb-16 px-4">
           <div className="max-w-7xl mx-auto text-center">
             <motion.div
@@ -454,7 +454,7 @@ export default function HomePage() {
           </div>
         </section>
         <Footer />
-      </main> */}
+      </main>
     </div>
   );
 }
